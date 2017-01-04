@@ -3,11 +3,16 @@ package utwente.ss.connect.common.model;
 public class Board {
 
 	// --- Constructor ---
+	
+	/**
+	 * Dimensions of the board
+	 */
+	private static final int DIM = 4;
 
 	/**
 	 * A board is actually a three dimensional bead object array.
 	 */
-	Bead[][][] board = new Bead[4][4][4];
+	Bead[][][] board = new Bead[DIM][DIM][DIM];
 
 	static Bead bead = new Bead(Colour.EMPTY);
 
@@ -17,9 +22,9 @@ public class Board {
 		int z = 0;
 
 		// Fill every position in the board with an empty bead object
-		for (x = 0; x < 4; x++) {
-			for (y = 0; y < 4; y++) {
-				for (z = 0; z < 4; z++) {
+		for (x = 0; x < DIM; x++) {
+			for (y = 0; y < DIM; y++) {
+				for (z = 0; z < DIM; z++) {
 					this.board[x][y][z] = bead;
 				}
 			}
@@ -52,7 +57,7 @@ public class Board {
 	 */
 	public int fallToPlace(int x, int z) {
 		int y = 0;
-		while (y < 4) {
+		while (y < DIM) {
 			if ((board[x][y][z].toString()).equals("EMPTY")) {
 				return y;
 			} else {
@@ -64,9 +69,9 @@ public class Board {
 
 	// toString method only used for testing
 	public String toString() {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				for (int k = 0; k < 4; k++) {
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				for (int k = 0; k < DIM; k++) {
 					System.out.println(board[i][j][k]);
 				}
 			}
@@ -86,16 +91,16 @@ public class Board {
 		builder.append(newLine);
 		builder.append("   ");
 
-		for (int z = 0; z < 4; z++) {
+		for (int z = 0; z < DIM; z++) {
 			builder.append("z = " + z);
 			builder.append(newLine);
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < DIM; i++) {
 				builder.append(i + " | ");
 			}
-			for (int x = 0; x < 4; x++) {
+			for (int x = 0; x < DIM; x++) {
 				builder.append(newLine);
 				builder.append(x + " ");
-				for (int y = 0; y < 4; y++) {
+				for (int y = 0; y < DIM; y++) {
 					builder.append(board[y][x][z].toString() + " | ");
 				}
 			}
