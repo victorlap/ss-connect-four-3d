@@ -1,5 +1,7 @@
 package utwente.ss.connect.common.model;
 
+import utwente.ss.connect.common.exception.BadMoveException;
+
 public class Board {
 
 	// --- Constructor ---
@@ -43,28 +45,29 @@ public class Board {
 	 * bead can fall and places the bead on the board
 	 */
 	public void doMove(int z, int x, Bead bead) {
-		int y = fallToPlace(x, z);
-		if (y == -1) {
-			System.out.println("collumn full, try another collumn");
-		} else {
+		try {
+			int y = fallToPlace(x, z);
 			board[x][y][z] = bead;
+		} catch (Exception e) {
+			System.out.println("collumn full, try another collumn");
 		}
 	}
 
 	/**
 	 * Calculate how far the bead can fall (calculate what the lowest Y value
 	 * is) in the collumn
+	 * @throws BadMoveException 
 	 */
-	public int fallToPlace(int x, int z) {
+	public int fallToPlace(int x, int z) throws BadMoveException {
 		int y = 0;
 		while (y < DIM) {
-			if ((board[x][y][z].toString()).equals("EMPTY")) {
+			if (board[x][y][z].getColour().equals(Colour.EMPTY)) {
 				return y;
 			} else {
 				y++;
 			}
 		}
-		return -1;
+		throw new BadMoveException();
 	}
 
 	// toString method only used for testing
