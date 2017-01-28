@@ -11,7 +11,6 @@ public class ComputerPlayer extends Player {
 		return "ComputerPlayer "+ super.getName();
 	}
 
-	@Override
 	public void determineMove() {
 		// TODO Auto-generated method stub
 

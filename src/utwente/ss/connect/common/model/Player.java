@@ -1,12 +1,16 @@
 package utwente.ss.connect.common.model;
 
-public abstract class Player {
+public class Player {
 	
 	protected String name;
 	protected Colour colour;
 	
+	public Player() {
+		this("UNKOWN");
+	}
+	
 	public Player(String name) {
-		setName(name);;
+		setName(name);
 		setColour(Colour.EMPTY);
 	}
 	
@@ -28,9 +32,15 @@ public abstract class Player {
 	
 	@Override
 	public String toString() {
-		return getName() +" : "+ getColour();
+		return getName();
 	}
 	
-	public abstract void determineMove();
-
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Player) {
+			Player other = (Player) o;
+			return this.getName().equals(other.getName());
+		}
+		return false;
+	}
 }

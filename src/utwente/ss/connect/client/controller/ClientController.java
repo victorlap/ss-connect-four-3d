@@ -6,6 +6,8 @@ public class ClientController {
 	
 	private Game game;
 	
+	private NetworkController network;
+	
 	public ClientController() {
 		game = new Game();
 	}
@@ -22,8 +24,7 @@ public class ClientController {
 		
 		ClientController controller = new ClientController();
 		controller.addMessage("Connect Four 3D Client by Victor Lap & Niek Khasuntsev\n" +
-							  "&copy 2016\n");
-				
+							  "\u00a9 2017\n");
 	}
 
 }

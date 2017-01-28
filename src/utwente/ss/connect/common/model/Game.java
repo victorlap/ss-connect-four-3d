@@ -7,6 +7,8 @@ public class Game {
 	public Board board;
 	public ArrayList<Player> players;
 	
+	public boolean hasStarted;
+	
 	public Game() {
 		board = new Board();
 		players = new ArrayList<Player>();
@@ -20,6 +22,10 @@ public class Game {
 		players.add(player);
 	}
 	
+	public void removePlayer(Player player) {
+		players.remove(player);
+	}
+	
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
@@ -30,6 +36,14 @@ public class Game {
 	
 	public boolean hasEnded() {
 		return board.hasWinner();
+	}
+	
+	public void start() {
+		hasStarted = true;
+	}
+	
+	public String getPlayerString() {
+		return players.get(0).getName() + " "+ players.get(1).getName();
 	}
 	
 }
