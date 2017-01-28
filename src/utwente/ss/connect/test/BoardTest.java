@@ -1,13 +1,11 @@
 package utwente.ss.connect.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
-import utwente.ss.connect.common.model.Colour;
 
 public class BoardTest {
 	

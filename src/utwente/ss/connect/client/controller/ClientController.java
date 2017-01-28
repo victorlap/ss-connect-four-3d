@@ -14,6 +14,10 @@ public class ClientController {
 		System.out.println(msg);
 	}
 	
+	public void deadConnection() {
+		// TODO
+	}
+	
 	public static void main(String[] args) {		
 		
 		ClientController controller = new ClientController();
