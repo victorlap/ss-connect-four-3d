@@ -36,8 +36,8 @@ public class Board {
 	// --- Commands ---
 
 	// TODO Implement logic
-	public void hasWinner() {
-
+	public boolean hasWinner() {
+		return false;
 	}
 
 	/**
