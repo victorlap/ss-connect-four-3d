@@ -49,7 +49,12 @@ public class Player {
 		return false;
 	}
 	
-	public String determineMove(Board board) {
+	public int[] determineMove(Board board) {
 		return null;
 	}
+	
+    public void makeMove(Board board) {
+        int[] keuze = determineMove(board);
+        board.doMove(keuze[0], keuze[1], getBead());
+    }
 }

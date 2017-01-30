@@ -30,14 +30,4 @@ public class Bead {
 	public String toString() {
 		return getColour().toString() + BEAD + RESET;
 	}
-
-//	public String toAnsi() {
-//		if (bead.getColour().equals(Colour.RED)) {
-//			return ANSI_RED + BEAD + ANSI_RESET;
-//		} else if (bead.getColour().equals(Colour.YELLOW)) {
-//			return ANSI_YELLOW + BEAD + ANSI_RESET;
-//		} else {
-//			return ANSI_WHITE + BEAD + ANSI_RESET;
-//		}
-//	}
 }
