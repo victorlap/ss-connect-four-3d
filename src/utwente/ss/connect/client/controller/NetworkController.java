@@ -163,10 +163,20 @@ public class NetworkController extends Thread implements Protocol{
 		}		
 	}
 	
+	/**
+	 * Set the username for future references
+	 * @param username
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	
+	/**
+	 * Gives back the opponents username
+	 * @param one Username one
+	 * @param two Username two
+	 * @return the username of the opponent.
+	 */
 	public String otherUser(String one, String two) {
 		if(username.equals(one)) {
 			return two;

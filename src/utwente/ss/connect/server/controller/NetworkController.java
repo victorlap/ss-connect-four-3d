@@ -34,6 +34,7 @@ public class NetworkController extends Thread implements Protocol {
 	
 
 	/**
+	 * Accepts new connections and sets up a new clienthandler for each incoming connection
 	 */
 	public void run() {
 		try {
@@ -54,11 +55,16 @@ public class NetworkController extends Thread implements Protocol {
 	}
 	
 	/**
+	 * Add new ClientHandler
 	 */
 	public void addHandler(ClientHandlerController handler) throws IOException {
 		clients.add(handler);
 	}
 	
+	/**
+	 * Remove a client handler and notify (possible) opponents
+	 * @param handler
+	 */
 	public void removeHandler(ClientHandlerController handler) {
 		Game g = getGame(handler.getPlayer());
 		broadcast(SERVER_CONNECTIONLOST + " "+ handler.getPlayer().getName(), getHandlers(g.getPlayers()));
@@ -67,6 +73,11 @@ public class NetworkController extends Thread implements Protocol {
 		clients.remove(handler);
 	}
 	
+	/**
+	 * Get all ClientHandlers by the player instance
+	 * @param players
+	 * @return
+	 */
 	private Collection<ClientHandlerController> getHandlers(ArrayList<Player> players) {
 		return clients.stream()
 			.filter(c -> players.contains(c.getPlayer()))
@@ -88,6 +99,7 @@ public class NetworkController extends Thread implements Protocol {
 	}
 	
 	/**
+	 * Checks if the username is in use.
 	 */
 	public boolean isUsernameInUse(String username) {
 		for(ClientHandlerController handler : clients) {
@@ -99,18 +111,33 @@ public class NetworkController extends Thread implements Protocol {
 	}
 	
 	/**
+	 * Checks whether the player is currently in a game.
 	 */
 	public boolean isInGame(Player player) {
 		return getGame(player) != null;
 	}
 	
+	/**
+	 * Executes the commands coming from the clients
+	 * @param command
+	 * @param sender
+	 */
 	public void execute(String command, ClientHandlerController sender) {
 	}
 	
+	/**
+	 * Broadast a message to all clientse	
+	 * @param msg
+	 */
 	public void broadcast(String msg) {
 		broadcast(msg, this.clients);
 	}
 	
+	/**
+	 * Broadcast a message to specific ClientHandlers
+	 * @param msg
+	 * @param clients
+	 */
 	public void broadcast(String msg, Collection<ClientHandlerController> clients) {
 		if(msg != null) {
 			for(ClientHandlerController handler : clients) {
@@ -120,6 +147,11 @@ public class NetworkController extends Thread implements Protocol {
 		}
 	}
 	
+	/**
+	 * Broadcast a message to a single client
+	 * @param msg
+	 * @param client
+	 */
 	public void broadcast(String msg, ClientHandlerController client) {
 		if(msg != null && client != null) {
 			client.sendMessage(msg);
@@ -127,6 +159,10 @@ public class NetworkController extends Thread implements Protocol {
 		}
 	}
 	
+	/**
+	 * Starts a new game
+	 * @param game
+	 */
 	private void startGame(Game game) {
 		System.out.println("In startgame()");
 		broadcast(SERVER_STARTGAME + " " + game.getPlayerString(), getHandlers(game.getPlayers()));

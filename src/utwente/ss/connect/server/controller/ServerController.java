@@ -18,6 +18,10 @@ public class ServerController {
 		network.start();
 	}
 	
+	/**
+	 * Starts a new instance of the Connect 4 3D Server
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new ServerController();
 	}

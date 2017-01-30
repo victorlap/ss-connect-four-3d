@@ -30,6 +30,9 @@ public class ClientHandlerController extends Thread {
 		this.player = new Player();
 	}
 	
+	/**
+	 * Reads the messages in the socket connection. Each message will be forwarded to the (Server) NetworkController 
+	 */
 	public void run() {
 		try {		
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -52,6 +55,10 @@ public class ClientHandlerController extends Thread {
 		}
 	}
 	
+	/**
+	 * Send a message to this specific client
+	 * @param msg
+	 */
 	public void sendMessage(String msg) {
 		if(msg != null) {
 			try {
@@ -63,6 +70,9 @@ public class ClientHandlerController extends Thread {
 		}
 	}
 	
+	/**
+	 * Shuts the server down and closes all open connections.
+	 */
 	public void shutdown() {
 		network.removeHandler(this);
 		isRunning = false;
@@ -76,6 +86,10 @@ public class ClientHandlerController extends Thread {
 		
 	}
 	
+	/**
+	 * Return the player instance associated with this client
+	 * @return
+	 */
 	public Player getPlayer() {
 		return player;
 	}
