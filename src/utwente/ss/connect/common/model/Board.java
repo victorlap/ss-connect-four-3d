@@ -363,5 +363,10 @@ public class Board {
 
 	}
 
+	public int getDIM() {
+		// TODO Auto-generated method stub
+		return DIM;
+	}
+
 
 }

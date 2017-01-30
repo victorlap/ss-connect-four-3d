@@ -2,7 +2,9 @@ package utwente.ss.connect.common.controller;
 
 import java.util.Scanner;
 
+import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
+import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Player;
 
 public class Game {
@@ -36,6 +38,11 @@ public class Game {
 	 */
 	private int current;
 
+	
+	private Player player1;
+	private Player player2;
+	
+	
 	// -- Constructors -----------------------------------------------
 
 	/*
@@ -116,7 +123,7 @@ public class Game {
 	private void play() {
 		update();
 		while (!board.gameOver()) {
-			players[current].determineMove(board);
+			players[current].makeMove(board);
 			update();
 			current = (current + 1) % NUMBER_PLAYERS;
 		}
