@@ -52,7 +52,7 @@ public class HumanPlayer extends Player {
 				String input = in.nextLine();
 				choice[0] = Integer.parseInt(input);
 			} catch (NumberFormatException e) {
-				System.out.println("Invalid input, please provide a valid X alue");
+				System.out.println("Invalid input, please provide a valid X");
 				choice[0] = -1;
 			}
 		}
