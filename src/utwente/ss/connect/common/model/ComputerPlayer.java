@@ -2,8 +2,8 @@ package utwente.ss.connect.common.model;
 
 public class ComputerPlayer extends Player {
 
-	public ComputerPlayer(String name) {
-		super(name);
+	public ComputerPlayer(String name, Bead bead) {
+		super(name, bead);
 	}
 	
 	@Override
@@ -11,8 +11,9 @@ public class ComputerPlayer extends Player {
 		return "ComputerPlayer "+ super.getName();
 	}
 
-	public void determineMove() {
-		// TODO Auto-generated method stub
+	@Override
+	public String determineMove(Board board) {
+		return null;
 
 	}
 

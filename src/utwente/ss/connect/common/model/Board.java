@@ -4,59 +4,58 @@ import utwente.ss.connect.common.exception.BadMoveException;
 
 public class Board {
 
-	// --- Constructor ---
-	
 	/**
-	 * Dimensions of the board
+	 * DIMensions of the board
 	 */
 	private static final int DIM = 4;
 
 	/**
-	 * A board is actually a three dimensional bead object array.
+	 * A board is actually a three DIMensional bead object array.
 	 */
-	Bead[][][] board = new Bead[DIM][DIM][DIM];
+	static Bead[][][] board;
+	
+	public static Bead emptybead = new Bead(Colour.EMPTY);
 
-	static Bead bead = new Bead(Colour.EMPTY);
-
+	// --- Constructor ---
 	public Board() {
-		int x = 0;
-		int y = 0;
-		int z = 0;
-
-		// Fill every position in the board with an empty bead object
-		for (x = 0; x < DIM; x++) {
-			for (y = 0; y < DIM; y++) {
-				for (z = 0; z < DIM; z++) {
-					this.board[x][y][z] = bead;
-				}
-			}
-		}
+		board = new Bead[DIM][DIM][DIM];
+		reset();
 	}
 
 	// --- Commands ---
 
-	// TODO Implement logic
-	public boolean hasWinner() {
-		return false;
+	public void reset() {
+		for (int x = 0; x < DIM; x++) {
+			for (int y = 0; y < DIM; y++) {
+				for (int z = 0; z < DIM; z++) {
+					this.board[x][y][z] = emptybead;
+				}
+			}
+		}
+
 	}
+
 
 	/**
 	 * User provides X and Y coordinate and the system calculates how far the
 	 * bead can fall and places the bead on the board
 	 */
-	public void doMove(int z, int x, Bead bead) {
+	public void doMove(int x, int z, Bead Bead) {
 		try {
 			int y = fallToPlace(x, z);
-			board[x][y][z] = bead;
+			board[x][y][z] = Bead;
 		} catch (Exception e) {
 			System.out.println("collumn full, try another collumn");
 		}
 	}
 
 	/**
+	 * Gravity method
+	 * 
 	 * Calculate how far the bead can fall (calculate what the lowest Y value
-	 * is) in the collumn
-	 * @throws BadMoveException 
+	 * is) in the collumn.
+	 * 
+	 * @throws BadMoveException
 	 */
 	public int fallToPlace(int x, int z) throws BadMoveException {
 		int y = 0;
@@ -69,6 +68,252 @@ public class Board {
 		}
 		throw new BadMoveException();
 	}
+	
+	/**
+	 * Checks whether the board is full
+	 */
+	public boolean isFull() {
+		boolean full = true;
+		for (int x = 0; x < DIM; x++) {
+			for (int y = 0; y < DIM; y++) {
+				for (int z = 0; z < DIM; z++) {
+					if (board[x][y][z].getColour().equals(Colour.EMPTY)) {
+						full = false;
+					}
+				}
+			}
+		}
+		return full;
+	}
+
+	public boolean isEmptyField(int x, int y, int z) {
+		if(board[x][y][z].equals(Colour.EMPTY)){
+			return true;
+		} return false;
+	}
+
+	/**
+	 * Checks whether the given bead has a row 
+	 * @param bead
+	 * @return boolean
+	 */
+	public boolean hasRow(Bead bead) {
+		boolean full;
+		for (int col = 0; col < DIM; col++) {
+			for (int depth = 0; depth < DIM; depth++) {
+				full = true;
+				for (int row = 0; row < DIM; row++) {
+					if (!board[row][col][depth].getColour().equals(bead.getColour())) {
+						full = false;
+					}
+				}
+				if (full) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+	
+	// --- Rule methods ---
+	
+	/**
+	 * Checks whether the given bead has a column
+	 * @param bead
+	 * @return boolean
+	 */
+
+	public boolean hasColumn(Bead bead) {
+		boolean full;
+		for (int row = 0; row < DIM; row++) {
+			for (int depth = 0; depth < DIM; depth++) {
+				full = true;
+				for (int col = 0; col < DIM; col++) {
+					if (!board[row][col][depth].getColour().equals(bead.getColour())) {
+						full = false;
+					}
+				}
+				if (full) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether the given bead has a row in depth (Z axis)
+	 * @param bead
+	 * @return boolean
+	 */
+	/*@ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c < getDIM();
+	  (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) == m));
+	@pure
+	 */
+	public boolean hasDepth(Bead bead) {
+		boolean full;
+		for (int col = 0; col < DIM; col++) {
+			for (int row = 0; row < DIM; row++) {
+				full = true;
+				for (int depth = 0; depth < DIM; depth++) {
+					if (!board[row][col][depth].getColour().equals(bead.getColour())) {
+						full = false;
+					}
+				}
+				if (full) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether the given bead has a diagonal in the XY plane
+	 */
+	public boolean hasDiagonalXY (Bead bead) {
+		boolean full;
+		for (int depth = 0; depth < DIM; depth++) {
+			full = true;
+			for (int xy = 0; xy < DIM; xy++) {
+				if (!board[xy][xy][depth].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		for (int height = 0; height < DIM; height++) {
+			full = true;
+			for (int xy = 0; xy < DIM; xy++) {
+				if (!board[xy][DIM - xy - 1][height].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether the given bead has a winning sequence through XZ
+	 */
+	public boolean hasDiagonalXZ(Bead bead) {
+		boolean full;
+		for (int col = 0; col < DIM; col++) {
+			full = true;
+			for (int xz = 0; xz < DIM; xz++) {
+				if (!board[xz][col][xz].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		for (int col = 0; col < DIM; col++) {
+			full = true;
+			for (int xz = 0; xz < DIM; xz++) {
+				if (!board[xz][col][DIM - xz - 1].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether the given bead has a winning sequence through YZ
+	 */
+	public boolean hasDiagonalYZ(Bead bead) {
+		boolean full;
+		for (int row = 0; row < DIM; row++) {
+			full = true;
+			for (int yz = 0; yz < DIM; yz++) {
+				if (!board[yz][yz][yz].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		for (int row = 0; row < DIM; row++) {
+			full = true;
+			for (int yz = 0; yz < DIM; yz++) {
+				if (!board[row][yz][DIM - yz - 1].getColour().equals(bead.getColour())) {
+					full = false;
+				}
+			}
+			if (full) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether the given bead forms a diagonal through XYZ
+	 */
+	public boolean hasDiagXYZ(Bead bead) {
+		
+		boolean diagonalTopLeft = true;
+		boolean diagonalTopRight = true;
+		boolean diagonalBottomLeft = true;
+		boolean diagonalBottomRight = true;
+		for (int xyz = 0; xyz < DIM; xyz++) {
+			if (!board[xyz][xyz][xyz].getColour().equals(bead.getColour())) {
+				diagonalTopLeft = false;
+			}
+			if (!board[DIM - xyz - 1][xyz][xyz].getColour().equals(bead.getColour())) {
+				diagonalTopRight = false;
+			}
+			if (!board[xyz][DIM - xyz - 1][xyz].getColour().equals(bead.getColour())) {
+				diagonalBottomLeft = false;
+			}
+			if (!board[DIM - xyz - 1][DIM - xyz - 1][xyz].getColour().equals(bead.getColour())) {
+				diagonalBottomRight = false;
+			}
+		}
+
+		return diagonalTopLeft || diagonalTopRight || diagonalBottomLeft || diagonalBottomRight;
+	}
+
+	
+	/**
+	 * Checks whether the given bead forms a winning sequence  
+	 */
+	public boolean isWinner(Bead bead) {
+		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) 
+				|| hasDiagonalYZ(bead) || hasDiagonalXY(bead) || hasDiagonalXZ(bead) 
+				|| hasDiagXYZ(bead);
+	
+	}
+	/**
+	 * Checks for both beads wether there is a winner
+	 */
+	public boolean hasWinner() {
+		return isWinner(new Bead(Colour.RED)) || isWinner(new Bead(Colour.YELLOW));
+	}
+
+	/**
+	 * Checks wether the game is over
+	 */
+	public boolean gameOver() {
+		return isFull() || hasWinner();
+	}
+
+	
+	// --- Printing methods ---
 
 	// toString method only used for testing
 	public String toString() {
@@ -97,15 +342,17 @@ public class Board {
 		for (int z = 0; z < DIM; z++) {
 			builder.append("z = " + z);
 			builder.append(newLine);
-			for (int i = 0; i < DIM; i++) {
-				builder.append(i + " | ");
-			}
-			for (int x = 0; x < DIM; x++) {
+
+			for (int x = DIM - 1; x >= 0; x = x -1) {
 				builder.append(newLine);
 				builder.append(x + " ");
 				for (int y = 0; y < DIM; y++) {
 					builder.append(board[y][x][z].toString() + " | ");
 				}
+			}
+			builder.append(newLine);
+			for (int i = 0; i < DIM; i++) {
+				builder.append(i + " | ");
 			}
 			builder.append(newLine);
 			builder.append(newLine);
@@ -116,24 +363,5 @@ public class Board {
 
 	}
 
-	public static void main(String[] args) {
-
-		Board b = new Board();
-
-		b.doMove(0, 0, bead = new Bead(Colour.RED));
-		b.doMove(2, 0, bead = new Bead(Colour.YELLOW));
-		b.doMove(0, 0, bead = new Bead(Colour.YELLOW));
-		b.doMove(0, 1, bead = new Bead(Colour.RED));
-		b.doMove(0, 2, bead = new Bead(Colour.YELLOW));
-		b.doMove(1, 0, bead = new Bead(Colour.YELLOW));
-		b.doMove(3, 3, bead = new Bead(Colour.YELLOW));
-
-		b.doMove(3, 0, bead = new Bead(Colour.YELLOW));
-
-		b.toGrid();
-
-		// System.out.println(Arrays.deepToString(board));
-
-	}
 
 }

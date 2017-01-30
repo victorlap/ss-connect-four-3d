@@ -3,15 +3,19 @@ package utwente.ss.connect.common.model;
 public class Player {
 	
 	protected String name;
-	protected Colour colour;
+	protected Bead bead;
 	
 	public Player() {
 		this("UNKOWN");
 	}
 	
 	public Player(String name) {
+		this(name, new Bead(Colour.EMPTY));
+	}
+	
+	public Player(String name, Bead bead) {
 		setName(name);
-		setColour(Colour.EMPTY);
+		setBead(bead);
 	}
 	
 	public void setName(String name) {
@@ -22,12 +26,13 @@ public class Player {
 		return name;
 	}
 	
-	public void setColour(Colour colour) {
-		this.colour = colour;
+	public void setBead(Bead bead) {
+		this.bead = bead;
 	}
 	
-	public Colour getColour() {
-		return colour;
+	public Bead getBead(){
+		
+		return bead;
 	}
 	
 	@Override
@@ -42,5 +47,9 @@ public class Player {
 			return this.getName().equals(other.getName());
 		}
 		return false;
+	}
+	
+	public String determineMove(Board board) {
+		return null;
 	}
 }
