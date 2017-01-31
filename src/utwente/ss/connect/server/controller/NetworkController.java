@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import utwente.ss.connect.common.Protocol;
@@ -24,19 +26,19 @@ public class NetworkController extends Thread implements Protocol {
 	private Collection<ClientHandlerController> clients;
 	private Collection<Game> games;
 
-	public NetworkController(ServerController controller) {
+	public NetworkController(ServerController controller, int port) {
 		super();
 
 		this.controller = controller;
-		this.port = PORTNUMBER;
+		this.port = port;
 
 		this.clients = new ArrayList<>();
 		this.games = new ArrayList<>();
 	}
 
 	/**
-	 * Accepts new connections and sets up a new clienthandler for each incoming.
-	 * connection
+	 * Accepts new connections and sets up a new clienthandler for each
+	 * incoming. connection
 	 */
 	public void run() {
 		try {
@@ -48,10 +50,8 @@ public class NetworkController extends Thread implements Protocol {
 			while (isRunning) {
 
 				Socket newSocket = sock.accept();
-				ClientHandlerController newHandler = 
-						new ClientHandlerController(this, newSocket, controller);
-				controller.addMessage("New Connection from: " 
-						+ newSocket.getInetAddress().getHostName());
+				ClientHandlerController newHandler = new ClientHandlerController(this, newSocket, controller);
+				controller.addMessage("New Connection from: " + newSocket.getInetAddress().getHostName());
 				addHandler(newHandler);
 				newHandler.start();
 			}
@@ -63,7 +63,7 @@ public class NetworkController extends Thread implements Protocol {
 	public void dispalyIpAddresses() {
 		try {
 			InetAddress localhost = InetAddress.getLocalHost();
-			controller.addMessage(" IP Addr: " + localhost.getHostAddress());
+			controller.addMessage(" IP Addr: " + localhost.getHostAddress() + ":" + port);
 
 			InetAddress[] allMyIps = InetAddress.getAllByName(localhost.getCanonicalHostName());
 			if (allMyIps != null && allMyIps.length > 1) {
@@ -91,8 +91,7 @@ public class NetworkController extends Thread implements Protocol {
 	 */
 	public void removeHandler(ClientHandlerController handler) {
 		Game g = getGame(handler.getPlayer());
-		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(), 
-				getHandlers(g.getPlayers()));
+		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(), getHandlers(g.getPlayers()));
 
 		g.removePlayer(handler.getPlayer());
 		clients.remove(handler);
@@ -104,9 +103,12 @@ public class NetworkController extends Thread implements Protocol {
 	 * @param players
 	 * @return
 	 */
-	private Collection<ClientHandlerController> getHandlers(ArrayList<Player> players) {
-		return clients.stream()
-				.filter(c -> players.contains(c.getPlayer())).collect(Collectors.toList());
+	private Collection<ClientHandlerController> getHandlers(List<Player> players) {
+		return clients.stream().filter(c -> players.contains(c.getPlayer())).collect(Collectors.toList());
+	}
+
+	private Collection<ClientHandlerController> getHandler(Player player) {
+		return getHandlers(Arrays.asList(player));
 	}
 
 	/**
@@ -157,16 +159,28 @@ public class NetworkController extends Thread implements Protocol {
 		System.arraycopy(commandlineSplit, 1, args, 0, commandlineSplit.length - 1);
 
 		switch (command) {
-			case SERVER_ACCEPTREQUEST:
-				// TODO: Handle the options of the server
+			case CLIENT_JOINREQUEST:
+				if (!isUsernameInUse(args[0])) {
+					sender.setName(args[0]);
+					broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
+				} else {
+					broadcast(SERVER_DENYREQUEST + DELIM + args[0], sender);
+				}
 				break;
-			case SERVER_DENYREQUEST:
-				// TODO:
+			case CLIENT_GAMEREQUEST:
+				addUserToGame(sender.getName());
 				break;
-			case SERVER_WAITFORCLIENT:
-				// TODO:
+			case CLIENT_SETMOVE:
+				// TODO
 				break;
+			case CLIENT_SENDMESSAGE:
+			case CLIENT_REQUESTCHALLENGELIST:
+			case CLIENT_REQUESTCHALLENGE:
+			case CLIENT_ANSWERCHALLENGE:
+			case CLIENT_REQUESTLEADERBOARD:
+			case CLIENT_SETLEADERBOARD:
 			default:
+				broadcast(SERVER_INVALIDCOMMAND, sender);
 				break;
 		}
 	}
@@ -208,15 +222,28 @@ public class NetworkController extends Thread implements Protocol {
 		}
 	}
 
-	/**
-	 * Starts a new game.
-	 * 
-	 * @param game
-	 */
-	private void startGame(Game game) {
-		System.out.println("In startgame()");
-		broadcast(SERVER_STARTGAME + " " + game.getPlayerString(), getHandlers(game.getPlayers()));
-		game.start();
+	public void addUserToGame(String name) {
+		Player player = new Player(name);
+		Game game = findFreeGame();
+		game.addPlayer(player);
+
+		if (game.getPlayers().size() == 2) {
+			game.start();
+			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(), getHandlers(game.getPlayers()));
+		} else {
+			broadcast(SERVER_WAITFORCLIENT, getHandler(player));
+		}
+	}
+
+	private Game findFreeGame() {
+		for (Game game : games) {
+			if (!game.hasStarted) {
+				return game;
+			}
+		}
+		Game game = new Game();
+		games.add(game);
+		return game;
 	}
 
 }

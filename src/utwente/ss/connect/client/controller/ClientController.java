@@ -41,6 +41,7 @@ public class ClientController {
 		name = view.getPlayername();
 		
 		game.addPlayer(new Player(name));
+		network.setName(name);
 		
 		network = new NetworkController(address, this);
 		network.start();
@@ -52,6 +53,7 @@ public class ClientController {
 		name = view.getPlayername();
 				
 		game.addPlayer(new Player(name));
+		network.setName(name);
 	}
 	
 	/**

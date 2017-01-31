@@ -27,6 +27,8 @@ package utwente.ss.connect.common;
 
 public interface Protocol {
 	
+	public static final String DELIM = " ";
+	
 	/**
 	 * PAY ATTENTION: 
 	 * 

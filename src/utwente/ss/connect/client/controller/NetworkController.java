@@ -46,7 +46,7 @@ public class NetworkController extends Thread implements Protocol{
 			isRunning = true;
 			
 			// Start all communications
-			sendMessage(Protocol.CLIENT_GAMEREQUEST);
+			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + username + DELIM + "0 0 0 0");
 
 
 			while(isRunning) {
@@ -144,7 +144,7 @@ public class NetworkController extends Thread implements Protocol{
 				// TODO: Handle move making.
 				break;
 			case SERVER_NOTIFYMOVE:
-				controller.addMessage(args[0] +" placed a move on x = "+ args[1] +" y = "+ args[2] +" z = "+ args[3]);
+				controller.addMessage(args[0] +" placed a move on x = "+ args[1] +" z = "+ args[2] +" z = "+ args[3]);
 				// TODO: update board.
 				break;
 			case SERVER_GAMEOVER:
@@ -153,22 +153,15 @@ public class NetworkController extends Thread implements Protocol{
 				break;
 			case SERVER_CONNECTIONLOST:
 				controller.addMessage(args[0] +" has disconnected from the server.");
+				// TODO
 				break;
 			case SERVER_INVALIDCOMMAND:
-				controller.addMessage("Whoops! Invalid command!");
+				controller.addMessage("Whoops! Something went wrong!");
 				break;
 			case SERVER_BROADCASTMESSAGE:
-				controller.addMessage(String.join(" ", args));
-				break;
 			case SERVER_CHALLENGELIST:
-				// TODO: Are we supporting a challengelist?
-				break;
 			case SERVER_RESULTCHALLENGE:
-				// TODO: Are we supporting a challengelist?
-				break;
 			case SERVER_BROADCASTLEADERBOARD:
-				// TODO: Are we supporting a leaderboard?
-				break;
 			default:
 				break;
 		}		
