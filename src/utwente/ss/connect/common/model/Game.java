@@ -73,6 +73,12 @@ public class Game extends Observable {
 	public void start() {
 		hasStarted = true;
 	}
+	
+	public void reset() {
+		current = 0;
+		players = new ArrayList<>();
+		board = new Board();
+	}
 
 	public String getPlayerString() {
 		return players.get(0).getName() + " " + players.get(1).getName();
@@ -91,6 +97,15 @@ public class Game extends Observable {
 			return players.get(0);
 		}
 		return players.get(1);
+	}
+	
+	public Player getPlayer(String name) {
+		for(Player player : players) {
+			if(player.getName().equals(name)) {
+				return player;
+			}
+		}
+		return null;
 	}
 
 }

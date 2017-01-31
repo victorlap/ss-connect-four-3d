@@ -21,7 +21,6 @@ public class NetworkController extends Thread implements Protocol {
 	private BufferedWriter out;
 
 	private boolean isRunning = false;
-	private String username = "UNKOWN";
 
 	public NetworkController(InetAddress server, ClientController controller) {
 		super();
@@ -47,7 +46,7 @@ public class NetworkController extends Thread implements Protocol {
 			isRunning = true;
 
 			// Start all communications
-			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + username + DELIM + "0 0 0 0");
+			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + controller.getMe().getName() + DELIM + "0 0 0 0");
 
 			while (isRunning) {
 				if (in.ready()) {
@@ -118,7 +117,7 @@ public class NetworkController extends Thread implements Protocol {
 
 		switch (command) {
 			case SERVER_ACCEPTREQUEST:
-				// TODO: Handle the options of the server
+				sendMessage(CLIENT_GAMEREQUEST);
 				break;
 			case SERVER_DENYREQUEST:
 				String name = args[0];
@@ -131,31 +130,31 @@ public class NetworkController extends Thread implements Protocol {
 			case SERVER_STARTGAME:
 				String opponent = otherUser(args[0], args[1]);
 				controller.addMessage("Starting game against " + opponent + ".");
-				// TODO: Start game
+				controller.startGame(opponent);
 				break;
 			case SERVER_MOVEREQUEST:
-				if (args[0].equals(username)) {
+				if (args[0].equals(controller.getMe().getName())) {
 					controller.addMessage("It's your turn to do a move!");
-					// TODO: Handle move making.
+					controller.askMove();
 				} else {
 					controller.addMessage("It's " + args[0] + "s turn to do a move!");
 				}
 				break;
 			case SERVER_DENYMOVE:
-				controller.addMessage("Whoops! This move is not valid!");
-				// TODO: Handle move making.
+				controller.addMessage("Whoops! This move is not valid! Try again.");
+				controller.askMove();
 				break;
 			case SERVER_NOTIFYMOVE:
-				controller.addMessage(args[0] + " placed a move on x = " + args[1] + " z = " + args[2] + " z = " + args[3]);
-				// TODO: update board.
+				controller.addMessage(args[0] + " placed a move on x = " + args[1] + " y = " + args[2] + " z = " + args[3]);
+				controller.notifyMove(args[1], args[3], args[0]);
 				break;
 			case SERVER_GAMEOVER:
 				controller.addMessage(args[0] + " wins the game!");
-				// TODO
+				controller.askStartAgain();
 				break;
 			case SERVER_CONNECTIONLOST:
 				controller.addMessage(args[0] + " has disconnected from the server.");
-				// TODO
+				controller.askStartAgain();
 				break;
 			case SERVER_INVALIDCOMMAND:
 				controller.addMessage("Whoops! Something went wrong!");
@@ -170,15 +169,6 @@ public class NetworkController extends Thread implements Protocol {
 	}
 
 	/**
-	 * Set the username for future references
-	 * 
-	 * @param username
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
 	 * Gives back the opponents username
 	 * 
 	 * @param one
@@ -188,7 +178,7 @@ public class NetworkController extends Thread implements Protocol {
 	 * @return the username of the opponent.
 	 */
 	public String otherUser(String one, String two) {
-		if (username.equals(one)) {
+		if (controller.getMe().getName().equals(one)) {
 			return two;
 		}
 		return one;

@@ -62,5 +62,16 @@ public class TuiView {
 	public String getPlayername() {
 		return readString("Enter your player name.");
 	}
+	
+	public int[] askMove() {
+		int[] answer = new int[2];
+		answer[0] = readInteger("Enter x coordinate");
+		answer[1] = readInteger("Enter y coordinate");
+		return answer;
+	}
+	
+	public boolean askStartAgain() {
+		return readBoolean("Want to start a new game? (y/n)", "y", "n");
+	}
 
 }
