@@ -3,7 +3,6 @@ package utwente.ss.connect.client.controller;
 import java.net.InetAddress;
 
 import utwente.ss.connect.client.view.TuiView;
-import utwente.ss.connect.common.Protocol;
 import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.Player;
 
@@ -23,7 +22,7 @@ public class ClientController {
 	}
 	
 	/**
-	 * Add a message to the UI
+	 * Add a message to the UI.
 	 * @param msg
 	 */
 	public void addMessage(String msg) {
@@ -31,7 +30,7 @@ public class ClientController {
 	}
 	
 	/**
-	 * Handle dead connections
+	 * Handle dead connections.
 	 */
 	public void deadConnection() {
 		// TODO

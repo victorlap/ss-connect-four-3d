@@ -2,9 +2,7 @@ package utwente.ss.connect.common.controller;
 
 import java.util.Scanner;
 
-import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
-import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Player;
 
 public class Game {
