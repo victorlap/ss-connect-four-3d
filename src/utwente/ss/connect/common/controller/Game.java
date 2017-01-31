@@ -35,11 +35,6 @@ public class Game {
 	 * Index of the current player.
 	 */
 	private int current;
-
-	
-	private Player player1;
-	private Player player2;
-	
 	
 	// -- Constructors -----------------------------------------------
 

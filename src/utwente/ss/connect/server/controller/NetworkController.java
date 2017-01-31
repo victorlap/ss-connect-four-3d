@@ -9,13 +9,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.stream.Collectors;
 
 import utwente.ss.connect.common.Protocol;
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.Player;
 
-public class NetworkController extends Thread implements Protocol {
+public class NetworkController extends Thread implements Protocol, Observer {
 
 	private ServerController controller;
 	private int port;
@@ -168,10 +172,20 @@ public class NetworkController extends Thread implements Protocol {
 				}
 				break;
 			case CLIENT_GAMEREQUEST:
-				addUserToGame(sender.getName());
+				addUserToGame(sender.getPlayer());
 				break;
 			case CLIENT_SETMOVE:
-				// TODO
+				if (isTurn(sender.getPlayer())) {
+					try {
+						int x = Integer.parseInt(args[0]);
+						int y = Integer.parseInt(args[1]);
+						getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
+					} catch (NumberFormatException e) {
+						broadcast(SERVER_DENYMOVE, sender);
+					}
+				} else {
+					broadcast(SERVER_DENYMOVE, sender);
+				}
 				break;
 			case CLIENT_SENDMESSAGE:
 			case CLIENT_REQUESTCHALLENGELIST:
@@ -183,6 +197,11 @@ public class NetworkController extends Thread implements Protocol {
 				broadcast(SERVER_INVALIDCOMMAND, sender);
 				break;
 		}
+	}
+
+	public boolean isTurn(Player player) {
+		Game g = getGame(player);
+		return g.isTurn(player);
 	}
 
 	/**
@@ -222,15 +241,18 @@ public class NetworkController extends Thread implements Protocol {
 		}
 	}
 
-	public void addUserToGame(String name) {
-		Player player = new Player(name);
+	public void addUserToGame(Player player) {
 		Game game = findFreeGame();
 		game.addPlayer(player);
 
 		if (game.getPlayers().size() == 2) {
+			player.setBead(new Bead(Colour.RED));
 			game.start();
 			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(), getHandlers(game.getPlayers()));
+
+			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
 		} else {
+			player.setBead(new Bead(Colour.YELLOW));
 			broadcast(SERVER_WAITFORCLIENT, getHandler(player));
 		}
 	}
@@ -243,7 +265,25 @@ public class NetworkController extends Thread implements Protocol {
 		}
 		Game game = new Game();
 		games.add(game);
+		game.addObserver(this);
 		return game;
+	}
+
+	public void update(Observable obs, Object obj) {
+		if (obs instanceof Game) {
+			Game game = (Game) obs;
+			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getLastMoveString(), getHandlers(game.getPlayers()));
+
+			if (game.hasEnded()) {
+				if (game.hasWinner()) {
+					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(), getHandlers(game.getPlayers()));
+				} else {
+					broadcast(SERVER_GAMEOVER, getHandlers(game.getPlayers()));
+				}
+			} else {
+				broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
+			}
+		}
 	}
 
 }
