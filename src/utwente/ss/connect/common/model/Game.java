@@ -26,6 +26,14 @@ public class Game {
 		players.remove(player);
 	}
 	
+	public void removePlayer(String playerName) {
+		for (Player player : players) {
+			if(player.getName().equals(playerName)) {
+				players.remove(player);
+			}
+		}
+	}
+	
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}

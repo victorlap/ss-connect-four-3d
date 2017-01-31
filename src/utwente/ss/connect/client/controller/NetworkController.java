@@ -44,6 +44,10 @@ public class NetworkController extends Thread implements Protocol{
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 			
 			isRunning = true;
+			
+			// Start all communications
+			sendMessage(Protocol.CLIENT_GAMEREQUEST);
+
 
 			while(isRunning) {
 				if(in.ready()) {
@@ -58,6 +62,7 @@ public class NetworkController extends Thread implements Protocol{
 		} catch (IOException e) {
 			shutdown();
 		}
+		shutdown();
 	}
 
 	/**
@@ -65,7 +70,13 @@ public class NetworkController extends Thread implements Protocol{
 	 * @param msg
 	 */
 	public void sendMessage(String msg) {
-		// TODO
+		try {
+			//controller.addMessage(msg);
+			out.write(msg + "\n");
+			out.flush();
+		} catch (IOException e) {
+			controller.addMessage("Sending message: "+ msg +" failed!");
+		}
 	}
 	
 	/**
@@ -110,7 +121,7 @@ public class NetworkController extends Thread implements Protocol{
 			case SERVER_DENYREQUEST:
 				String name = args[0];
 				controller.addMessage("Username "+ name +" is already in use!");
-				// TODO: Let user change username
+				controller.usernameInUse();
 				break;
 			case SERVER_WAITFORCLIENT:
 				controller.addMessage("Waiting for other player...");

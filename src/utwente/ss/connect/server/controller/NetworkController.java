@@ -1,8 +1,10 @@
 package utwente.ss.connect.server.controller;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -40,6 +42,8 @@ public class NetworkController extends Thread implements Protocol {
 		try {
 			sock = new ServerSocket(port);
 			isRunning = true;
+			
+			dispalyIpAddresses();
 
 			while(isRunning) {
 
@@ -51,6 +55,23 @@ public class NetworkController extends Thread implements Protocol {
 			}	
 		} catch (IOException e) {
 			controller.addMessage("Server couldn't start because the port is not available");
+		}
+	}
+	
+	public void dispalyIpAddresses() {
+		try {
+			InetAddress localhost = InetAddress.getLocalHost();
+			controller.addMessage(" IP Addr: " + localhost.getHostAddress());
+	
+			InetAddress[] allMyIps = InetAddress.getAllByName(localhost.getCanonicalHostName());
+			if (allMyIps != null && allMyIps.length > 1) {
+			    controller.addMessage(" Full list of IP addresses:");
+				for (int i = 0; i < allMyIps.length; i++) {
+					controller.addMessage("    " + allMyIps[i]);
+				}
+			}
+		} catch (UnknownHostException e) {
+			controller.addMessage(" (error retrieving server host name)");
 		}
 	}
 	
@@ -122,7 +143,26 @@ public class NetworkController extends Thread implements Protocol {
 	 * @param command
 	 * @param sender
 	 */
-	public void execute(String command, ClientHandlerController sender) {
+	public void execute(String commandline, ClientHandlerController sender) {
+		controller.addMessage(commandline);
+		String[] commandlineSplit = commandline.split(" ");
+		
+		String command = commandlineSplit[0];
+		String[] args = new String[commandlineSplit.length -1];
+		System.arraycopy(commandlineSplit, 1, args, 0, (commandlineSplit.length -1));
+		
+		switch(command) {
+			case SERVER_ACCEPTREQUEST:
+				// TODO: Handle the options of the server
+				break;
+			case SERVER_DENYREQUEST:
+				// TODO:
+				break;
+			case SERVER_WAITFORCLIENT:
+				// TODO:
+				break;
+			default:
+				break;
 	}
 	
 	/**

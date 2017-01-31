@@ -5,6 +5,7 @@ public class ServerController {
 	private NetworkController network;
 	
 	public ServerController() {
+		startListening();
 	}
 	
 	public void addMessage(String msg) {
