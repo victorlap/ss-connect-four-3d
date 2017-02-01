@@ -27,19 +27,22 @@ public class SmartStrategy extends Strategy {
 //		}
 		List<int[]> myList = getPossibleMoves(getBoard());
 		Board board = getBoard();
-		// check if you have a winning move
-		for (int i = 0; i < myList.size(); i++) {
-			Board temp = board.deepCopy();
-			temp.doMove(myList.get(i)[0], myList.get(i)[1], bead);
-			if (temp.isWinner(bead)) {
-				return myList.get(i);
-			}
-		}
+		
 		// check if the enemy has a winning move
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
 			temp.doMove(myList.get(i)[0], myList.get(i)[1], new Bead(bead.next(bead)));
 			if (temp.isWinner(new Bead(bead.next(bead)))) {
+				return myList.get(i);
+			}
+		}
+		
+		
+		// check if you have a winning move
+		for (int i = 0; i < myList.size(); i++) {
+			Board temp = board.deepCopy();
+			temp.doMove(myList.get(i)[0], myList.get(i)[1], bead);
+			if (temp.isWinner(bead)) {
 				return myList.get(i);
 			}
 		}
