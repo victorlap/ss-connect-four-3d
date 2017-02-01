@@ -2,12 +2,10 @@ package utwente.ss.connect.common.controller;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Scanner;
 
 import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
-import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.players.Player;
 
 public class Game extends Observable {
@@ -58,7 +56,7 @@ public class Game extends Observable {
 	}
 
 	public void doMove(int x, int z, Bead bead) throws BadMoveException {
-		int y = board.fallToPlace(x,z); 
+		int y = board.fallToPlace(x, z);
 		board.doMove(z, x, bead);
 		lastmove = players.get(current).getName() + " " + x + " " + y + " " + z;
 		current = (current + 1) % players.size();
@@ -81,7 +79,7 @@ public class Game extends Observable {
 	public void start() {
 		hasStarted = true;
 	}
-	
+
 	public void reset() {
 		current = 0;
 		players = new ArrayList<>();
@@ -106,10 +104,10 @@ public class Game extends Observable {
 		}
 		return players.get(1);
 	}
-	
+
 	public Player getPlayer(String name) {
-		for(Player player : players) {
-			if(player.getName().equals(name)) {
+		for (Player player : players) {
+			if (player.getName().equals(name)) {
 				return player;
 			}
 		}

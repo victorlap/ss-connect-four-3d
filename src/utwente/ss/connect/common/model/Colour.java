@@ -15,7 +15,7 @@ public enum Colour {
 	}
 
 	public Colour next(Colour colour) {
-		switch(colour) {
+		switch (colour) {
 			case YELLOW:
 				return RED;
 			case RED:

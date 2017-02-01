@@ -14,10 +14,10 @@ import java.util.Observer;
 import java.util.stream.Collectors;
 
 import utwente.ss.connect.common.Protocol;
-import utwente.ss.connect.common.model.Bead;
-import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.controller.Game;
 import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.players.Player;
 
 public class NetworkController extends Thread implements Protocol, Observer {
@@ -55,8 +55,10 @@ public class NetworkController extends Thread implements Protocol, Observer {
 			while (isRunning) {
 
 				Socket newSocket = sock.accept();
-				ClientHandlerController newHandler = new ClientHandlerController(this, newSocket, controller);
-				controller.addMessage("New Connection from: " + newSocket.getInetAddress().getHostName());
+				ClientHandlerController newHandler = new ClientHandlerController(this, newSocket,
+						controller);
+				controller.addMessage(
+						"New Connection from: " + newSocket.getInetAddress().getHostName());
 				addHandler(newHandler);
 				newHandler.start();
 			}
@@ -96,7 +98,8 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 */
 	public void removeHandler(ClientHandlerController handler) {
 		Game g = getGame(handler.getPlayer());
-		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(), getHandlers(g.getPlayers()));
+		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(),
+				getHandlers(g.getPlayers()));
 
 		g.removePlayer(handler.getPlayer());
 		clients.remove(handler);
@@ -109,7 +112,8 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @return
 	 */
 	private Collection<ClientHandlerController> getHandlers(List<Player> players) {
-		return clients.stream().filter(c -> players.contains(c.getPlayer())).collect(Collectors.toList());
+		return clients.stream().filter(c -> players.contains(c.getPlayer()))
+				.collect(Collectors.toList());
 	}
 
 	private Collection<ClientHandlerController> getHandler(Player player) {
@@ -156,8 +160,8 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @param sender
 	 * @throws BadMoveException
 	 */
-	public void execute(String commandline, ClientHandlerController sender) throws BadMoveException {
-		controller.addMessage(commandline);
+	public void execute(String commandline, ClientHandlerController sender)
+			throws BadMoveException {
 		String[] commandlineSplit = commandline.split(" ");
 
 		String command = commandlineSplit[0];
@@ -248,9 +252,11 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		if (game.getPlayers().size() == 2) {
 			player.setBead(new Bead(Colour.RED));
 			game.start();
-			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(), getHandlers(game.getPlayers()));
+			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(),
+					getHandlers(game.getPlayers()));
 
-			broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
+			broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(),
+					getHandler(game.getCurrent()));
 		} else {
 			player.setBead(new Bead(Colour.YELLOW));
 			broadcast(SERVER_WAITFORCLIENT, getHandler(player));
@@ -272,16 +278,19 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	public void update(Observable obs, Object obj) {
 		if (obs instanceof Game) {
 			Game game = (Game) obs;
-			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getLastMoveString(), getHandlers(game.getPlayers()));
+			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getLastMoveString(),
+					getHandlers(game.getPlayers()));
 
 			if (game.hasEnded()) {
 				if (game.hasWinner()) {
-					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(), getHandlers(game.getPlayers()));
+					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(),
+							getHandlers(game.getPlayers()));
 				} else {
 					broadcast(SERVER_GAMEOVER, getHandlers(game.getPlayers()));
 				}
 			} else {
-				broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
+				broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(),
+						getHandler(game.getCurrent()));
 			}
 		}
 	}

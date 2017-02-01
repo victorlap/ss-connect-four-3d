@@ -25,7 +25,8 @@ public class ClientHandlerController extends Thread {
 
 	private boolean isRunning;
 
-	public ClientHandlerController(NetworkController network, Socket sock, ServerController server) {
+	public ClientHandlerController(NetworkController network, Socket sock,
+			ServerController server) {
 		this.network = network;
 		this.sock = sock;
 		this.server = server;

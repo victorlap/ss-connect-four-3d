@@ -2,7 +2,7 @@ package utwente.ss.connect.common;
 
 /**
  * Programming Project module 2 Software Systems 2016-2017 Interface Protocol
- * with the made agreements during the practical of 11-01-2017
+ * with the made agreements during the practical of 11-01-2017.
  * 
  * @author Niek Khasuntsev
  * @version 1.0.4 (31-01-2017)
@@ -38,12 +38,12 @@ public interface Protocol {
 	// --------------- Pre game ---------------
 
 	/**
-	 * Value for the standart port
+	 * Value for the standart port.
 	 */
 	public static final int PORTNUMBER = 1337;
 
 	/**
-	 * Used for joining a server (or a.k.a. "lobby")
+	 * Used for joining a server (or a.k.a. "lobby").
 	 * 
 	 * Arguments: - name = Name of the client - chat = Whether the client
 	 * supports chat or not - challenge = Whether the client supports challenge
@@ -64,7 +64,7 @@ public interface Protocol {
 
 	/**
 	 * Used for accepting the client request to join the server and notify the
-	 * client of the features that the server supports
+	 * client of the features that the server supports.
 	 * 
 	 * Arguments: - name = Name of the client - chat = Whether the client
 	 * supports chat or not - challenge = Whether the client supports challenge
@@ -84,7 +84,7 @@ public interface Protocol {
 	public static final String SERVER_ACCEPTREQUEST = "acceptrequest";
 
 	/**
-	 * Used to deny the client if the name is already in use
+	 * Used to deny the client if the name is already in use.
 	 * 
 	 * Argument: name : Name of the client
 	 * 
@@ -99,7 +99,7 @@ public interface Protocol {
 	public static final String SERVER_DENYREQUEST = "denyrequest";
 
 	/**
-	 * Used to let the server know that the client wants to start a game
+	 * Used to let the server know that the client wants to start a game.
 	 * 
 	 * Direction: Client -> Server
 	 */
@@ -107,14 +107,14 @@ public interface Protocol {
 
 	/**
 	 * Used to let the client know that he has to wait for a second client to
-	 * join the game
+	 * join the game.
 	 * 
 	 * Direction: Server -> Client
 	 */
 	public static final String SERVER_WAITFORCLIENT = "waitforclient";
 
 	/**
-	 * Used to let the clients know that a game has been started
+	 * Used to let the clients know that a game has been started.
 	 * 
 	 * Arguments: - name1 = Name of the first player - name2 = Name of the
 	 * second player
@@ -130,7 +130,7 @@ public interface Protocol {
 	// --------------- In game ---------------
 
 	/**
-	 * Used by the server to let the client know that he has to do a move
+	 * Used by the server to let the client know that he has to do a move.
 	 * 
 	 * Arguments: - name = name of the player whose turn it is
 	 * 
@@ -143,7 +143,7 @@ public interface Protocol {
 	public static final String SERVER_MOVEREQUEST = "moverequest";
 
 	/**
-	 * Used by the client to do a move
+	 * Used by the client to do a move.
 	 * 
 	 * Arguments: - x = x Coordinate on the board - z = z Coordinate on the
 	 * board
@@ -171,7 +171,7 @@ public interface Protocol {
 	public static final String SERVER_DENYMOVE = "denymove";
 
 	/**
-	 * Used to let the clients know that a move has been made
+	 * Used to let the clients know that a move has been made.
 	 * 
 	 * Arguments: - name = Name of the client that performed the move //TODO
 	 * check if necessary - x = x Coordinate on the board - y = y Coordinate on
@@ -204,7 +204,7 @@ public interface Protocol {
 	// --------------- Error ---------------
 
 	/**
-	 * Used when one client disconnects from the server
+	 * Used when one client disconnects from the server.
 	 * 
 	 * Arguments: - name = name of the player who disconnected
 	 * 
@@ -217,7 +217,7 @@ public interface Protocol {
 	public static final String SERVER_CONNECTIONLOST = "connectionlost";
 
 	/**
-	 * Used everytime a client tries to perform an invalid command
+	 * Used everytime a client tries to perform an invalid command.
 	 * 
 	 * Direction: Server -> Client
 	 */
@@ -226,7 +226,7 @@ public interface Protocol {
 	// --------------- Extra features ---------------
 
 	/**
-	 * Used to send chat messages to the server
+	 * Used to send chat messages to the server.
 	 * 
 	 * Argument: - message = The message that you want to send to the server
 	 * 
@@ -240,7 +240,7 @@ public interface Protocol {
 
 	/**
 	 * Used to broadcast the message to all the clients that support the chat
-	 * feature
+	 * feature.
 	 * 
 	 * Argument: - message = The message that you want to send to the server
 	 * 
@@ -254,7 +254,7 @@ public interface Protocol {
 
 	/**
 	 * Used to request a list of all the clients that support the challenge
-	 * feature
+	 * feature.
 	 * 
 	 * Direction: Client -> Server
 	 */
@@ -273,7 +273,7 @@ public interface Protocol {
 	public static final String SERVER_CHALLENGELIST = "challengelist";
 
 	/**
-	 * Used to send a challenge to the other client
+	 * Used to send a challenge to the other client.
 	 * 
 	 * Arguments: - name = Name of the client that you want to challenge
 	 * 
@@ -286,7 +286,7 @@ public interface Protocol {
 	public static final String CLIENT_REQUESTCHALLENGE = "requestchallenge";
 
 	/**
-	 * Used to notify the client that someone else is challenging him
+	 * Used to notify the client that someone else is challenging him.
 	 * 
 	 * Arguments: - name = Name of the client that is challenging you
 	 * 
@@ -300,7 +300,7 @@ public interface Protocol {
 	public static final String SERVER_NOTIFYCHALLENGE = "notifychallenge";
 
 	/**
-	 * Used by the client that got challenged to answer the challenge
+	 * Used by the client that got challenged to answer the challenge.
 	 * 
 	 * Arguments: - answer = The answer to the challenge - name = Name of the
 	 * client that challenged
@@ -317,7 +317,7 @@ public interface Protocol {
 	public static final String CLIENT_ANSWERCHALLENGE = "answerchallenge";
 
 	/**
-	 * Used to notify the other client whether the challenge has been accepted
+	 * Used to notify the other client whether the challenge has been accepted.
 	 * or not
 	 * 
 	 * Arguments: - answer = The answer to the challenge - name = Name of the
@@ -335,7 +335,7 @@ public interface Protocol {
 	public static final String SERVER_RESULTCHALLENGE = "resultchallenge";
 
 	/**
-	 * Used by the client to request the leaderboard from the server
+	 * Used by the client to request the leaderboard from the server.
 	 * 
 	 * Direction: Client -> Server
 	 */

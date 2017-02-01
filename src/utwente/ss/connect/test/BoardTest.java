@@ -1,6 +1,8 @@
 package utwente.ss.connect.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -140,7 +142,7 @@ public class BoardTest {
 		board.doMove(0, 0, yellowBead);
 
 		assertTrue(board.hasDiagonalXY(yellowBead));
-	
+
 	}
 
 	@Test
@@ -160,10 +162,10 @@ public class BoardTest {
 		board.doMove(3, 0, yellowBead);
 		assertTrue(board.hasDiagonalXZ(yellowBead));
 	}
-	
+
 	@Test
-	public void hasDiagonalYZ(){
-		
+	public void hasDiagonalYZ() {
+
 	}
 
 }
