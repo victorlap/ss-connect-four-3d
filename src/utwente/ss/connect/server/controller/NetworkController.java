@@ -290,6 +290,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 					getHandlers(game.getPlayers()));
 
 			if (game.hasEnded()) {
+				games.remove(game);
 				if (game.hasWinner()) {
 					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(),
 							getHandlers(game.getPlayers()));
