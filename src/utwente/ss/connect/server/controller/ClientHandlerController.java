@@ -34,6 +34,10 @@ public class ClientHandlerController extends Thread {
 		this.player = new Player("Niek", new Bead(Colour.RED));
 	}
 
+	/**
+	 * Reads the messages in the socket connection. Each message will be
+	 * forwarded to the (Server) NetworkController.
+	 */
 	public void run() {
 		try {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -45,6 +49,7 @@ public class ClientHandlerController extends Thread {
 				if (in.ready()) {
 					String command = in.readLine();
 					if (command != null && !command.isEmpty()) {
+						server.addMessage("[MESSASGE from " + player.getName() + "] " + command);
 						network.execute(command, this);
 					} else {
 						shutdown();
@@ -60,13 +65,14 @@ public class ClientHandlerController extends Thread {
 	}
 
 	/**
-	 * Send a message to this specific client
+	 * Send a message to this specific client.
 	 * 
 	 * @param msg
 	 */
 	public void sendMessage(String msg) {
 		if (msg != null) {
 			try {
+				server.addMessage("[BROADCAST to " + player.getName() + "] " + msg);
 				out.write(msg + "\n");
 				out.flush();
 			} catch (IOException e) {
@@ -92,7 +98,7 @@ public class ClientHandlerController extends Thread {
 	}
 
 	/**
-	 * Return the player instance associated with this client
+	 * Return the player instance associated with this client.
 	 * 
 	 * @return
 	 */
