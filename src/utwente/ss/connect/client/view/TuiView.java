@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import utwente.ss.connect.client.controller.ClientController;
+import utwente.ss.connect.common.Protocol;
+import utwente.ss.connect.common.Util;
 
 public class TuiView {
 
@@ -32,6 +34,18 @@ public class TuiView {
 		return address;
 	}
 	
+	public int getPort() {
+		int port = -1;
+		do {
+			port = readInteger("Enter the port, enter 0 for default:" 
+					+ " [" + Protocol.PORTNUMBER + "]");
+		} while (port != -1 && !Util.available(port));
+		if (port == 0) {
+			return Protocol.PORTNUMBER;
+		}
+		return port;
+	}
+	
 	private boolean readBoolean(String prompt, String yes, String no) {
 		String answer;
 		do {
@@ -46,6 +60,7 @@ public class TuiView {
 		do {
 			client.addMessage(prompt);
 			answer = in.nextInt();
+			in.nextLine(); //Needed because nextInt doesnt skip to next line
 		} while (answer == null);
 		return answer;
 	}

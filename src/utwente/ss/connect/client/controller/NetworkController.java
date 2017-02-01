@@ -23,12 +23,12 @@ public class NetworkController extends Thread implements Protocol {
 
 	private boolean isRunning = false;
 
-	public NetworkController(InetAddress server, ClientController controller) {
+	public NetworkController(InetAddress server, int port, ClientController controller) {
 		super();
 
 		this.server = server;
 		this.controller = controller;
-		this.port = PORTNUMBER;
+		this.port = port;
 	}
 
 	/**
