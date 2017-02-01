@@ -8,7 +8,10 @@ import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Game;
+import utwente.ss.connect.common.model.players.ComputerPlayer;
+import utwente.ss.connect.common.model.players.HumanPlayer;
 import utwente.ss.connect.common.model.players.Player;
+import utwente.ss.connect.common.model.strategies.SmartStrategy;
 
 public class ClientController {
 
@@ -43,9 +46,9 @@ public class ClientController {
 
 	public void start() {
 		InetAddress address = view.connectServer();
+		me = new ComputerPlayer(new SmartStrategy());
 		int port = view.getPort();
 
-		me = new Player();
 		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
@@ -66,7 +69,7 @@ public class ClientController {
 	}
 
 	public void startGame(String opponent) {
-		game.addPlayer(new Player(opponent));
+		game.addPlayer( new ComputerPlayer(new SmartStrategy(), opponent));
 		game.getPlayers().get(0).setBead(new Bead(Colour.RED));
 		game.getPlayers().get(1).setBead(new Bead(Colour.YELLOW));
 		game.start();
@@ -84,7 +87,7 @@ public class ClientController {
 	}
 
 	public void askMove() throws BadMoveException {
-		int[] move = view.askMove();
+		int[] move = game.getCurrent().determineMove(game.getBoard());
 		game.tryMove(move[0], move[1], me.getBead());
 		network.sendMessage(
 				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);

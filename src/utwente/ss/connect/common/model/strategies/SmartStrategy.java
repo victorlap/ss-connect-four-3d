@@ -19,7 +19,7 @@ public class SmartStrategy extends Strategy {
 
 	@Override
 	public int[] generateMove(Bead bead) {
-		List<int[]> myList = getMoves(getBoard());
+		List<int[]> myList = getPossibleMoves(getBoard());
 		Board board = getBoard();
 		// check if you have a winning move
 		for (int i = 0; i < myList.size(); i++) {
@@ -43,7 +43,7 @@ public class SmartStrategy extends Strategy {
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
 			temp.doMove(myList.get(i)[0], myList.get(i)[1], bead);
-			List<int[]> futureList = getMoves(temp);
+			List<int[]> futureList = getPossibleMoves(temp);
 			boolean valid = true;
 			for (int j = 0; j < futureList.size(); j++) {
 				temp.doMove(futureList.get(j)[0], futureList.get(j)[1], new Bead(bead.next(bead)));

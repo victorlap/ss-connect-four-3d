@@ -18,30 +18,30 @@ public abstract class Strategy {
 	public Board getBoard() {
 		return board;
 	}
-	
+
 	public abstract String getName();
 
 	public abstract int[] generateMove(Bead bead);
 
 	public int[] randomMove() {
-		List<int[]> moves = getMoves(getBoard());
+		List<int[]> moves = getPossibleMoves(getBoard());
 		return moves.get((int) (Math.random() * moves.size()));
 	}
 
-	public List<int[]> getMoves(Board strategyBoard) {
-		List<int[]> allMoves = new ArrayList<int[]>();
-		for (int x = 0; x < strategyBoard.getDIM(); x++) {
-			for (int z = 0; z < strategyBoard.getDIM(); z++) {
-				if (strategyBoard.getField(x, z, strategyBoard.getDIM() - 1)
-						.toString().equals(Colour.EMPTY)) {
+	public List<int[]> getPossibleMoves(Board temp) {
+		List<int[]> myList = new ArrayList<int[]>();
+		for (int c = 0; c < temp.getDIM(); c++) {
+			for (int r = 0; r < temp.getDIM(); r++) {
+				
+				if (temp.getField(c, r, temp.getDIM() - 1).getColour().equals(Colour.EMPTY)) {
 					int[] move = new int[2];
-					move[0] = x;
-					move[1] = z;
-					allMoves.add(move);
+					move[0] = c;
+					move[1] = r;
+					myList.add(move);
 				}
 			}
 		}
-		return allMoves;
+		return myList;
 	}
 
 }

@@ -38,8 +38,7 @@ public class NetworkController extends Thread implements Protocol {
 	public void run() {
 		try {
 
-			controller.addMessage(
-					"Connecting to server on " + server.getHostName() + ":" + port + ".");
+			controller.addMessage("Connecting to server on " + server.getHostName() + ":" + port + ".");
 
 			sock = new Socket(server, port);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -48,8 +47,7 @@ public class NetworkController extends Thread implements Protocol {
 			isRunning = true;
 
 			// Start all communications
-			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + controller.getMe().getName() + DELIM
-					+ "0 0 0 0");
+			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + controller.getMe().getName() + DELIM + "0 0 0 0");
 
 			while (isRunning) {
 				if (in.ready()) {
@@ -123,81 +121,55 @@ public class NetworkController extends Thread implements Protocol {
 		System.arraycopy(commandlineSplit, 1, args, 0, commandlineSplit.length - 1);
 
 		switch (command) {
-			case SERVER_ACCEPTREQUEST:
-				sendMessage(CLIENT_GAMEREQUEST);
-				break;
-			case SERVER_DENYREQUEST:
-				if (args.length >= 1) {
-					String name = args[0];
-					controller.addMessage("Username " + name + " is already in use!");
-					controller.usernameInUse();
-				} else {
-					controller.addMessage("Got wrong message from server: " + commandline);
-				}
-				break;
-			case SERVER_WAITFORCLIENT:
-				controller.addMessage("Waiting for other player...");
-				break;
-			case SERVER_STARTGAME:
-				if (args.length >= 2) {
-					String opponent = otherUser(args[0], args[1]);
-					controller.addMessage("Starting game against " + opponent + ".");
-					controller.startGame(opponent);
-				} else {
-					controller.addMessage("Got wrong message from server: " + commandline);
-				}
-				break;
-			case SERVER_MOVEREQUEST:
-				if (args.length >= 1) {
-					if (args[0].equals(controller.getMe().getName())) {
-						controller.addMessage("It's your turn to do a move!");
-						controller.askMove();
-					} else {
-						controller.addMessage("It's " + args[0] + "s turn to do a move!");
-					}
-				} else {
-					controller.addMessage("Got wrong message from server: " + commandline);
-				}
-				break;
-			case SERVER_DENYMOVE:
-				controller.addMessage("Whoops! This move is not valid! Try again.");
+		case SERVER_ACCEPTREQUEST:
+			sendMessage(CLIENT_GAMEREQUEST);
+			break;
+		case SERVER_DENYREQUEST:
+			String name = args[0];
+			controller.addMessage("Username " + name + " is already in use!");
+			controller.usernameInUse();
+			break;
+		case SERVER_WAITFORCLIENT:
+			controller.addMessage("Waiting for other player...");
+			break;
+		case SERVER_STARTGAME:
+			String opponent = otherUser(args[0], args[1]);
+			controller.addMessage("Starting game against " + opponent + ".");
+			controller.startGame(opponent);
+			break;
+		case SERVER_MOVEREQUEST:
+			if (args[0].equals(controller.getMe().getName())) {
+				controller.addMessage("It's your turn to do a move!");
 				controller.askMove();
-				break;
-			case SERVER_NOTIFYMOVE:
-				if (args.length >= 4) {
-					controller.addMessage(args[0] + " placed a move on x = " + args[1] + " y = "
-							+ args[2] + " z = " + args[3]);
-					controller.notifyMove(args[1], args[3], args[0]);
-				} else {
-					controller.addMessage("Got wrong message from server: " + commandline);
-				}
-				break;
-			case SERVER_GAMEOVER:
-				if (args.length >= 1) {
-					controller.addMessage(args[0] + " wins the game!");
-					controller.askStartAgain();
-				} else {
-					controller.addMessage("Draw!");
-					controller.askStartAgain();
-				}
-				break;
-			case SERVER_CONNECTIONLOST:
-				if (args.length >= 1) {
-					controller.addMessage(args[0] + " has disconnected from the server.");
-					controller.askStartAgain();
-				} else {
-					controller.addMessage("Got wrong message from server: " + commandline);
-				}
-				break;
-			case SERVER_INVALIDCOMMAND:
-				controller.addMessage("Whoops! Something went wrong!");
-				break;
-			case SERVER_BROADCASTMESSAGE:
-			case SERVER_CHALLENGELIST:
-			case SERVER_RESULTCHALLENGE:
-			case SERVER_BROADCASTLEADERBOARD:
-			default:
-				break;
+			} else {
+				controller.addMessage("It's " + args[0] + "s turn to do a move!");
+			}
+			break;
+		case SERVER_DENYMOVE:
+			controller.addMessage("Whoops! This move is not valid! Try again.");
+			controller.askMove();
+			break;
+		case SERVER_NOTIFYMOVE:
+			controller.addMessage(args[0] + " placed a move on x = " + args[1] + " y = " + args[2] + " z = " + args[3]);
+			controller.notifyMove(args[1], args[3], args[0]);
+			break;
+		case SERVER_GAMEOVER:
+			controller.addMessage(args[0] + " wins the game!");
+			controller.askStartAgain();
+			break;
+		case SERVER_CONNECTIONLOST:
+			controller.addMessage(args[0] + " has disconnected from the server.");
+			controller.askStartAgain();
+			break;
+		case SERVER_INVALIDCOMMAND:
+			controller.addMessage("Whoops! Something went wrong!");
+			break;
+		case SERVER_BROADCASTMESSAGE:
+		case SERVER_CHALLENGELIST:
+		case SERVER_RESULTCHALLENGE:
+		case SERVER_BROADCASTLEADERBOARD:
+		default:
+			break;
 		}
 	}
 

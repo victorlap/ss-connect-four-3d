@@ -18,4 +18,5 @@ public class NaiveStrategy extends Strategy {
 	public String getName() {
 		return "naive";
 	}
+
 }
