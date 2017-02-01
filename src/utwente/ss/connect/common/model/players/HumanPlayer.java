@@ -1,13 +1,11 @@
 package utwente.ss.connect.common.model.players;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
 import utwente.ss.connect.common.model.strategies.SmartStrategy;
-import utwente.ss.connect.common.model.strategies.Strategy;
 
 /**
  * @author Niek Khasuntsev
@@ -85,15 +83,4 @@ public class HumanPlayer extends Player {
 		}
 		return choice;
 	}
-
-	private int readInt() {
-		int answer = -1;
-		do {
-			answer = in.nextInt();
-			in.nextLine();
-			// in.nextLine(); // Needed because nextInt doesnt skip to next line
-		} while (answer == -1);
-		return answer;
-	}
-
 }
