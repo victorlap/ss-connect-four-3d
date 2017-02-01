@@ -40,7 +40,6 @@ public class SmartStrategy extends Strategy {
 			}
 		}
 		
-		
 		// check if you have a winning move
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
