@@ -22,7 +22,6 @@ public class BoardTest {
 	@Before
 	public void setUp() throws Exception {
 		board = new Board();
-
 	}
 
 	@Test
@@ -83,6 +82,7 @@ public class BoardTest {
 		board.doMove(2, 0, yellowBead);
 		board.doMove(3, 0, yellowBead);
 		assertTrue(board.hasRow(yellowBead));
+		System.out.println(board.toGrid());
 	}
 
 	@Test

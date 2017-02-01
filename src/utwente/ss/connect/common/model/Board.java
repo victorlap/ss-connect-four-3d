@@ -346,33 +346,34 @@ public class Board {
 	public String toGrid() {
 
 		StringBuilder builder = new StringBuilder();
-		String newLine = System.getProperty("line.separator");
-
-		builder.append(" ");
+		final String newLine = System.getProperty("line.separator");
+		final String tab = "   ";
+		
+		for (int i = 0; i < DIM; i++) {
+			builder.append("   z = " + (i) + "  " + tab + tab + tab + tab);
+		}
 		builder.append(newLine);
-		builder.append("   ");
-
-		for (int z = 0; z < DIM; z++) {
-			builder.append("z = " + z);
-			builder.append(newLine);
-
-			for (int x = DIM - 1; x >= 0; x = x - 1) {
-				builder.append(newLine);
+		
+		for (int x = DIM - 1; x >= 0; x--) {
+			for (int z = 0; z < DIM; z++) {
 				builder.append(x + " ");
 				for (int y = 0; y < DIM; y++) {
-					builder.append(board[y][x][z].toString() + " | ");
+					builder.append(board[y][x][z].toString());
+					if(y != DIM -1) {
+						 builder.append(" | ");
+					}
 				}
+				builder.append(tab);
 			}
-			builder.append(newLine);
-			for (int i = 0; i < DIM; i++) {
-				builder.append("  ");
-				builder.append(i + " |");
-			}
-			builder.append(newLine);
-			builder.append(newLine);
 			builder.append(newLine);
 		}
-		System.out.println(builder.toString());
+		for (int i = 0; i < DIM; i++) {
+			builder.append("  0    1    2    3   ");
+				if( i != 1) {
+					builder.append(" ");
+				}
+		}
+
 		return builder.toString();
 
 	}
