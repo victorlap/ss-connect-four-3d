@@ -31,6 +31,13 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	private Collection<ClientHandlerController> clients;
 	private Collection<Game> games;
 
+	/**
+	 * Start a new NetworkController. This controller is responsible for all
+	 * incoming and outgoing messages to the clients.
+	 * 
+	 * @param controller
+	 * @param port
+	 */
 	public NetworkController(ServerController controller, int port) {
 		super();
 
@@ -42,15 +49,15 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	}
 
 	/**
-	 * Accepts new connections and sets up a new clienthandler for each
-	 * incoming. connection
+	 * Accepts new connections and sets up a new clienthandler for each incoming
+	 * connection.
 	 */
 	public void run() {
 		try {
 			sock = new ServerSocket(port);
 			isRunning = true;
 
-			dispalyIpAddresses();
+			displayIpAddresses();
 
 			while (isRunning) {
 
@@ -67,7 +74,11 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		}
 	}
 
-	public void dispalyIpAddresses() {
+	/**
+	 * Print all the known ipaddresses to the controller.
+	 */
+	//@pure
+	private void displayIpAddresses() {
 		try {
 			InetAddress localhost = InetAddress.getLocalHost();
 			controller.addMessage(" IP Addr: " + localhost.getHostAddress() + ":" + port);
@@ -100,30 +111,41 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		Game g = getGame(handler.getPlayer());
 		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(),
 				getHandlers(g.getPlayers()));
-		controller.addMessage("CONNETION LOSTTTSTSTSTSTSTSTST");
 
 		g.removePlayer(handler.getPlayer());
 		clients.remove(handler);
 	}
 
 	/**
-	 * Get all ClientHandlers by the player instance.
+	 * Get all ClientHandlers by the player instances.
 	 * 
 	 * @param players
 	 * @return
 	 */
+	//@pure
 	private Collection<ClientHandlerController> getHandlers(List<Player> players) {
 		return clients.stream().filter(c -> players.contains(c.getPlayer()))
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Get all ClientHandlers by the player instance.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	//@pure
 	private Collection<ClientHandlerController> getHandler(Player player) {
 		return getHandlers(Arrays.asList(player));
 	}
 
 	/**
-	 * Get game by player.
+	 * Get game by Player.
+	 * 
+	 * @param byPlayer
+	 * @return
 	 */
+	//@pure
 	public Game getGame(Player byPlayer) {
 		for (Game game : games) {
 			for (Player player : game.getPlayers()) {
@@ -138,6 +160,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	/**
 	 * Checks if the username is in use.
 	 */
+	//@pure
 	public boolean isUsernameInUse(String username) {
 		for (ClientHandlerController handler : clients) {
 			if (handler.getPlayer().getName().equals(username)) {
@@ -150,6 +173,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	/**
 	 * Checks whether the player is currently in a game.
 	 */
+	//@pure
 	public boolean isInGame(Player player) {
 		return getGame(player) != null;
 	}
@@ -217,6 +241,13 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		}
 	}
 
+	/**
+	 * Is it the turn of the player?
+	 * 
+	 * @param player
+	 * @return
+	 */
+	//@pure
 	public boolean isTurn(Player player) {
 		Game g = getGame(player);
 		return g.isTurn(player);
@@ -227,6 +258,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * 
 	 * @param msg
 	 */
+	//@pure
 	public void broadcast(String msg) {
 		broadcast(msg, this.clients);
 	}
@@ -237,6 +269,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @param msg
 	 * @param clients
 	 */
+	//@pure
 	public void broadcast(String msg, Collection<ClientHandlerController> handlers) {
 		if (msg != null) {
 			for (ClientHandlerController handler : handlers) {
@@ -251,12 +284,21 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @param msg
 	 * @param client
 	 */
+	//@pure
 	public void broadcast(String msg, ClientHandlerController client) {
 		if (msg != null && client != null) {
 			client.sendMessage(msg);
 		}
 	}
 
+	/**
+	 * Add player to a (new) game.
+	 * 
+	 * @param player
+	 */
+	/*@ ensures player.getBead().getColour() == Colour.YELLOW 
+	 		|| player.getBead().getColour() == Colour.RED;
+	 */
 	public void addUserToGame(Player player) {
 		Game game = findFreeGame();
 		game.addPlayer(player);
@@ -275,6 +317,13 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		}
 	}
 
+	/**
+	 * Find an open game for a player, if there is no open game, create a new
+	 * one and prepare it for playing
+	 * 
+	 * @return
+	 */
+	/*@ ensures \result.hasStarted == false; */
 	private Game findFreeGame() {
 		for (Game game : games) {
 			if (!game.hasStarted) {
@@ -287,6 +336,10 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		return game;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void update(Observable obs, Object obj) {
 		if (obs instanceof Game) {
 			Game game = (Game) obs;

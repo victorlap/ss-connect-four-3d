@@ -21,7 +21,7 @@ public class SmartStrategy extends Strategy {
 
 	@Override
 	public int[] generateMove(Bead bead) {
-		nextBead = new Bead(bead.next(bead));
+		nextBead = new Bead(Bead.next(bead));
 		// try {
 		// Thread.sleep(2000);
 		// } catch (InterruptedException e) {

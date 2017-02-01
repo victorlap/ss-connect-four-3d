@@ -31,6 +31,7 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public int[] determineMove(Board board) {
+		think();
 		return strat.generateMove(getBead());
 
 	}

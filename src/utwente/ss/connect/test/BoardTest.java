@@ -294,7 +294,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void NoBottomLeftToTopRight() {
+	public void noBottomLeftToTopRight() {
 		board.doMove(0, 0, redBead);
 		board.doMove(1, 1, yellowBead);
 		board.doMove(1, 1, yellowBead);
@@ -316,7 +316,8 @@ public class BoardTest {
 	@Test
 	public void toStringTest() {
 		board.doMove(0, 0, redBead);
-		assertTrue(board.getField(0, 0, 0).toString().equals("\u001B[31m" + "\u2B24" + "\u001B[0m"));
+		assertTrue(
+				board.getField(0, 0, 0).toString().equals("\u001B[31m" + "\u2B24" + "\u001B[0m"));
 	}
 
 	@Test
@@ -347,22 +348,22 @@ public class BoardTest {
 	}
 
 	@Test
-	public void deepCopyTest(){
+	public void deepCopyTest() {
 		board.doMove(0, 0, yellowBead);
 		board.doMove(0, 0, yellowBead);
 		board.doMove(0, 0, yellowBead);
-		
+
 		Board temp = board.deepCopy();
-		
+
 		boolean equal = true;
 		for (int x = 0; x < board.getDIM(); x++) {
 			for (int y = 0; y < board.getDIM(); y++) {
 				for (int z = 0; z < board.getDIM(); z++) {
-					if(!board.getField(x, y, z).equals(temp.getField(x, y, z))){
+					if (!board.getField(x, y, z).equals(temp.getField(x, y, z))) {
 						equal = false;
 					}
 				}
-			} 
+			}
 			assertTrue(equal);
 		}
 	}

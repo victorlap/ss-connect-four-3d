@@ -8,8 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import utwente.ss.connect.common.exception.BadMoveException;
-import utwente.ss.connect.common.model.Bead;
-import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.players.Player;
 
 public class ClientHandlerController extends Thread {
@@ -32,7 +30,6 @@ public class ClientHandlerController extends Thread {
 		this.server = server;
 
 		this.player = new Player();
-//		this.player = new Player("Niek", new Bead(Colour.RED));
 	}
 
 	/**
@@ -60,7 +57,6 @@ public class ClientHandlerController extends Thread {
 		} catch (IOException e) {
 			shutdown();
 		} catch (BadMoveException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -70,6 +66,7 @@ public class ClientHandlerController extends Thread {
 	 * 
 	 * @param msg
 	 */
+	// @pure
 	public void sendMessage(String msg) {
 		if (msg != null) {
 			try {
@@ -108,6 +105,7 @@ public class ClientHandlerController extends Thread {
 	 * 
 	 * @return
 	 */
+	// @pure
 	public Player getPlayer() {
 		return player;
 	}

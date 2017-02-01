@@ -1,7 +1,5 @@
 package utwente.ss.connect.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -26,12 +24,12 @@ public class GameTest {
 	}
 	
 	@Test
-	public void getBoardTest(){
+	public void getBoardTest() {
 		assertTrue(game.getBoard().equals(board));
 	}
 	
 	@Test
-	public void addPlayerTest(){
+	public void addPlayerTest() {
 		player1 = new HumanPlayer();
 		game.addPlayer(player1);
 		

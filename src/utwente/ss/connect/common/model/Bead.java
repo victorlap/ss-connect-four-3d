@@ -13,16 +13,12 @@ public class Bead {
 	public static final String BEAD = "\u2B24";
 
 	private Colour colour;
-	private Bead bead;
 
 	public Bead(Colour colour) {
 		this.colour = colour;
 	}
 
-	public Bead getBead() {
-		return bead;
-	}
-
+	//@pure
 	public Colour getColour() {
 		return colour;
 	}
@@ -31,7 +27,7 @@ public class Bead {
 		return getColour().toString() + BEAD + RESET;
 	}
 
-	public Colour next(Bead b) {
+	public static Colour next(Bead b) {
 		switch (b.getColour()) {
 			case YELLOW:
 				return Colour.RED;
