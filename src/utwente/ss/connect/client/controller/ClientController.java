@@ -58,12 +58,14 @@ public class ClientController {
 		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
+		
+		network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName() + Protocol.DELIM + "0 0 0 0");
 	}
 
 	public void startGame(String opponent) {
 		game.addPlayer(new Player(opponent));
 		game.getPlayers().get(0).setBead(new Bead(Colour.RED));
-		game.getPlayers().get(0).setBead(new Bead(Colour.YELLOW));
+		game.getPlayers().get(1).setBead(new Bead(Colour.YELLOW));
 		game.start();
 	}
 

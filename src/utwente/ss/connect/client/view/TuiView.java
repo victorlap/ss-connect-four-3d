@@ -66,7 +66,7 @@ public class TuiView {
 	public int[] askMove() {
 		int[] answer = new int[2];
 		answer[0] = readInteger("Enter x coordinate");
-		answer[1] = readInteger("Enter y coordinate");
+		answer[1] = readInteger("Enter z coordinate");
 		return answer;
 	}
 	
