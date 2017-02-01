@@ -1,5 +1,6 @@
 package utwente.ss.connect.client.controller;
 
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 
 import utwente.ss.connect.client.view.TuiView;
@@ -44,8 +45,8 @@ public class ClientController {
 
 	public void start() {
 		InetAddress address = view.connectServer();
-		me = new ComputerPlayer(new SmartStrategy());
-		me.setName(me.getName());
+		me = new ComputerPlayer(new NaiveStrategy());
+		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
 
@@ -59,14 +60,12 @@ public class ClientController {
 		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
-		
-		network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName() + Protocol.DELIM + "0 0 0 0");
 	}
 
 	public void startGame(String opponent) {
-		game.addPlayer(new ComputerPlayer(new NaiveStrategy()));
+		game.addPlayer(new Player(opponent));
 		game.getPlayers().get(0).setBead(new Bead(Colour.RED));
-		game.getPlayers().get(1).setBead(new Bead(Colour.YELLOW));
+		game.getPlayers().get(0).setBead(new Bead(Colour.YELLOW));
 		game.start();
 	}
 
@@ -82,7 +81,14 @@ public class ClientController {
 	}
 
 	public void askMove() throws BadMoveException {
-		int[] move = view.askMove();
+
+		int[] move = null;
+		if (game.getCurrent() instanceof HumanPlayer) {
+			move = view.askMove();
+		}
+		if (game.getCurrent() instanceof ComputerPlayer) {
+			move = game.getCurrent().determineMove(game.getBoard());
+		}
 		game.doMove(move[0], move[1], me.getBead());
 		network.sendMessage(Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
 	}

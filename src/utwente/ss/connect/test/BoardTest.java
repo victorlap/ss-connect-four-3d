@@ -159,6 +159,8 @@ public class BoardTest {
 		board.doMove(2, 1, yellowBead);
 		board.doMove(3, 0, yellowBead);
 		assertTrue(board.hasDiagonalXZ(yellowBead));
+		
+		System.out.print(board.toGrid());
 	}
 	
 	@Test

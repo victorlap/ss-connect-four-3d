@@ -28,6 +28,8 @@ public class ServerController {
 
 		startListening(port);
 	}
+	//192.168.0.175:1337
+
 
 	/**
 	 * Starts a new instance of the Connect 4 3D Server.

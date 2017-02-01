@@ -8,12 +8,13 @@ public class Player {
 
 	protected String name;
 	protected Bead bead;
-	
-	public Player(){
+
+	public Player() {
 		this.name = "unknown";
 	}
-	public Player(String name){
-		this.name = name;
+
+	public Player(String name) {
+		this.name = "" + (int) Math.random() * 5;
 	}
 
 	public Player(String name, Bead bead) {
@@ -23,7 +24,7 @@ public class Player {
 
 	public Player(Strategy strategy, Bead bead) {
 		name = strategy.getName();
-		this.bead = bead; 
+		this.bead = bead;
 	}
 
 	public void setName(String name) {
