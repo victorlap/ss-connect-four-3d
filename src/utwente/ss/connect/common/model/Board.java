@@ -5,15 +5,15 @@ import utwente.ss.connect.common.exception.BadMoveException;
 public class Board {
 
 	/**
-	 * DIMensions of the board
+	 * DIMensions of the board.
 	 */
 	private static final int DIM = 4;
 
 	/**
-	 * A board is actually a three DIMensional bead object array.
+	 * A board is actually a three Dimensional bead object array.
 	 */
-	static Bead[][][] board;
-	
+	private Bead[][][] board;
+
 	public static Bead emptybead = new Bead(Colour.EMPTY);
 
 	// --- Constructor ---
@@ -32,19 +32,28 @@ public class Board {
 				}
 			}
 		}
-
 	}
 
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return Bead object on the place in the array
+	 */
+	public Bead getField(int x, int y, int z) {
+		return board[x][y][z];
+	}
 
 	/**
-	 * User provides X and Y coordinate and the system calculates how far the
+	 * User provides X and Y coordinate and the system calculates how far the.
 	 * bead can fall and places the bead on the board
 	 */
-	public void doMove(int x, int z, Bead Bead) {
+	public void doMove(int x, int z, Bead bead) {
 		try {
 			int y = fallToPlace(x, z);
-			board[x][y][z] = Bead;
-		} catch (Exception e) {
+			board[x][y][z] = bead;
+		} catch (BadMoveException e) {
 			System.out.println("collumn full, try another collumn");
 		}
 	}
@@ -68,9 +77,9 @@ public class Board {
 		}
 		throw new BadMoveException();
 	}
-	
+
 	/**
-	 * Checks whether the board is full
+	 * Checks whether the board is full.
 	 */
 	public boolean isFull() {
 		boolean full = true;
@@ -87,13 +96,12 @@ public class Board {
 	}
 
 	public boolean isEmptyField(int x, int y, int z) {
-		if(board[x][y][z].equals(Colour.EMPTY)){
-			return true;
-		} return false;
+		return board[x][y][z].equals(Colour.EMPTY);
 	}
 
 	/**
-	 * Checks whether the given bead has a row 
+	 * Checks whether the given bead has a row.
+	 * 
 	 * @param bead
 	 * @return boolean
 	 */
@@ -115,11 +123,12 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	// --- Rule methods ---
-	
+
 	/**
-	 * Checks whether the given bead has a column
+	 * Checks whether the given bead has a column.
+	 * 
 	 * @param bead
 	 * @return boolean
 	 */
@@ -142,15 +151,19 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Checks whether the given bead has a row in depth (Z axis)
+	 * 
 	 * @param bead
 	 * @return boolean
 	 */
-	/*@ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c < getDIM();
-	  (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) == m));
-	@pure
+	/*
+	 * @ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c
+	 * < getDIM(); (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) ==
+	 * m));
+	 * 
+	 * @pure
 	 */
 	public boolean hasDepth(Bead bead) {
 		boolean full;
@@ -170,11 +183,11 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Checks whether the given bead has a diagonal in the XY plane
+	 * Checks whether the given bead has a diagonal in the XY plane.
 	 */
-	public boolean hasDiagonalXY (Bead bead) {
+	public boolean hasDiagonalXY(Bead bead) {
 		boolean full;
 		for (int depth = 0; depth < DIM; depth++) {
 			full = true;
@@ -200,9 +213,9 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Checks whether the given bead has a winning sequence through XZ
+	 * Checks whether the given bead has a winning sequence through XZ.
 	 */
 	public boolean hasDiagonalXZ(Bead bead) {
 		boolean full;
@@ -230,9 +243,9 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Checks whether the given bead has a winning sequence through YZ
+	 * Checks whether the given bead has a winning sequence through YZ.
 	 */
 	public boolean hasDiagonalYZ(Bead bead) {
 		boolean full;
@@ -260,12 +273,13 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Checks whether the given bead forms a diagonal through XYZ
+	 * Checks whether the given bead forms a diagonal through XYZ.
 	 */
 	public boolean hasDiagXYZ(Bead bead) {
-		
+
+		// Four different starting points
 		boolean diagonalTopLeft = true;
 		boolean diagonalTopRight = true;
 		boolean diagonalBottomLeft = true;
@@ -288,31 +302,29 @@ public class Board {
 		return diagonalTopLeft || diagonalTopRight || diagonalBottomLeft || diagonalBottomRight;
 	}
 
-	
 	/**
-	 * Checks whether the given bead forms a winning sequence  
+	 * Checks whether the given bead forms a winning sequence.
 	 */
 	public boolean isWinner(Bead bead) {
-		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) 
-				|| hasDiagonalYZ(bead) || hasDiagonalXY(bead) || hasDiagonalXZ(bead) 
-				|| hasDiagXYZ(bead);
-	
+		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) || hasDiagonalYZ(bead) || hasDiagonalXY(bead)
+				|| hasDiagonalXZ(bead) || hasDiagXYZ(bead);
+
 	}
+
 	/**
-	 * Checks for both beads wether there is a winner
+	 * Checks for both beads wether there is a winner.
 	 */
 	public boolean hasWinner() {
 		return isWinner(new Bead(Colour.RED)) || isWinner(new Bead(Colour.YELLOW));
 	}
 
 	/**
-	 * Checks wether the game is over
+	 * Checks wether the game is over.
 	 */
 	public boolean gameOver() {
 		return isFull() || hasWinner();
 	}
 
-	
 	// --- Printing methods ---
 
 	// toString method only used for testing
@@ -328,7 +340,7 @@ public class Board {
 	}
 
 	/**
-	 * Build a grid out of the board
+	 * Build a grid out of the board.
 	 */
 	public String toGrid() {
 
@@ -343,7 +355,7 @@ public class Board {
 			builder.append("z = " + z);
 			builder.append(newLine);
 
-			for (int x = DIM - 1; x >= 0; x = x -1) {
+			for (int x = DIM - 1; x >= 0; x = x - 1) {
 				builder.append(newLine);
 				builder.append(x + " ");
 				for (int y = 0; y < DIM; y++) {
@@ -352,7 +364,8 @@ public class Board {
 			}
 			builder.append(newLine);
 			for (int i = 0; i < DIM; i++) {
-				builder.append(i + " | ");
+				builder.append("  ");
+				builder.append(i + " |");
 			}
 			builder.append(newLine);
 			builder.append(newLine);
@@ -364,9 +377,18 @@ public class Board {
 	}
 
 	public int getDIM() {
-		// TODO Auto-generated method stub
 		return DIM;
 	}
 
-
+	public Board deepCopy() {
+		Board copy = new Board();
+		for (int x = 0; x < DIM; x++) {
+			for (int y = 0; y < DIM; y++) {
+				for (int z = 0; z < DIM; z++) {
+					copy.board[x][y][z] = this.board[x][y][z];
+				}
+			}
+		}
+		return copy;
+	}
 }

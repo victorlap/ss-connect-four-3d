@@ -7,40 +7,42 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Colour;
+import utwente.ss.connect.common.model.players.Player;
 
 public class ClientHandlerController extends Thread {
-	
+
 	private NetworkController network;
 	private ServerController server;
-	
+
 	private Socket sock;
 	private BufferedReader in;
 	private BufferedWriter out;
-	
+
 	private Player player;
-	
+
 	private boolean isRunning;
-	
+
 	public ClientHandlerController(NetworkController network, Socket sock, ServerController server) {
 		this.network = network;
 		this.sock = sock;
 		this.server = server;
-		
-		this.player = new Player();
+
+		this.player = new Player("Niek", new Bead(Colour.RED));
 	}
-	
+
 	public void run() {
-		try {		
+		try {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-			
+
 			isRunning = true;
 
-			while(isRunning) {
-				if(in.ready()) {
+			while (isRunning) {
+				if (in.ready()) {
 					String command = in.readLine();
-					if(command != null && ! command.isEmpty()) {
+					if (command != null && !command.isEmpty()) {
 						network.execute(command, this);
 					} else {
 						shutdown();
@@ -51,18 +53,18 @@ public class ClientHandlerController extends Thread {
 			shutdown();
 		}
 	}
-	
+
 	public void sendMessage(String msg) {
-		if(msg != null) {
+		if (msg != null) {
 			try {
 				out.write(msg + "\n");
 				out.flush();
 			} catch (IOException e) {
-				server.addMessage("[ERROR] Couldn't send message: "+ msg);
+				server.addMessage("[ERROR] Couldn't send message: " + msg);
 			}
 		}
 	}
-	
+
 	public void shutdown() {
 		network.removeHandler(this);
 		isRunning = false;
@@ -73,9 +75,9 @@ public class ClientHandlerController extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public Player getPlayer() {
 		return player;
 	}

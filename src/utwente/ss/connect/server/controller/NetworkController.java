@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import utwente.ss.connect.common.Protocol;
 import utwente.ss.connect.common.model.Game;
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.model.players.Player;
 
 public class NetworkController extends Thread implements Protocol {
 	

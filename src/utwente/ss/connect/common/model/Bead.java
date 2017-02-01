@@ -30,4 +30,15 @@ public class Bead {
 	public String toString() {
 		return getColour().toString() + BEAD + RESET;
 	}
+	
+	public Colour next(Bead bead) {
+		switch(bead.getColour()) {
+			case YELLOW:
+				return Colour.RED;
+			case RED:
+				return Colour.YELLOW;
+			default:
+				return Colour.EMPTY;
+		}
+	}
 }

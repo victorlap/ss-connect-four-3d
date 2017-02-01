@@ -5,7 +5,7 @@ import java.util.Scanner;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
 import utwente.ss.connect.common.model.Colour;
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.model.players.Player;
 
 public class Game {
 
@@ -38,11 +38,10 @@ public class Game {
 	 */
 	private int current;
 
-	
 	private Player player1;
 	private Player player2;
-	
-	
+
+
 	// -- Constructors -----------------------------------------------
 
 	/*
@@ -147,7 +146,9 @@ public class Game {
 	private void printResult() {
 		if (board.hasWinner()) {
 			Player winner = board.isWinner(players[0].getBead()) ? players[0] : players[1];
-			System.out.println("Speler " + winner.getName() + " (" + winner.getBead().getColour().toString() + ") has won!");
+			System.out.println(
+					"Speler " + winner.getName() + " (" 
+							+ winner.getBead().getColour().toString() + ") has won!");
 		} else {
 			System.out.println("Draw. There is no winner!");
 		}
