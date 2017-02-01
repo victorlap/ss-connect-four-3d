@@ -8,7 +8,8 @@ import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.controller.Game;
 import utwente.ss.connect.common.exception.BadMoveException;
-import utwente.ss.connect.common.model.players.Player;
+import utwente.ss.connect.common.model.players.*;
+import utwente.ss.connect.common.model.strategies.*;
 
 public class ClientController {
 
@@ -43,8 +44,8 @@ public class ClientController {
 
 	public void start() {
 		InetAddress address = view.connectServer();
-		me = new Player();
-		me.setName(view.getPlayername());
+		me = new ComputerPlayer(new SmartStrategy());
+		me.setName(me.getName());
 
 		game.addPlayer(me);
 
@@ -61,7 +62,7 @@ public class ClientController {
 	}
 
 	public void startGame(String opponent) {
-		game.addPlayer(new Player(opponent));
+		game.addPlayer(new ComputerPlayer(new NaiveStrategy()));
 		game.getPlayers().get(0).setBead(new Bead(Colour.RED));
 		game.getPlayers().get(0).setBead(new Bead(Colour.YELLOW));
 		game.start();

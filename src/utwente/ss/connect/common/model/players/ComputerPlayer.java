@@ -7,6 +7,11 @@ import utwente.ss.connect.common.model.strategies.Strategy;
 public class ComputerPlayer extends Player {
 	
 	private Strategy strat;
+	
+	public ComputerPlayer(Strategy strat) {
+		super(strat.getName());
+		this.strat = strat;
+	}
 
 	public ComputerPlayer(Strategy strat, Bead bead) {
 		super(strat.getName(), bead);
