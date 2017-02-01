@@ -19,6 +19,12 @@ public class SmartStrategy extends Strategy {
 
 	@Override
 	public int[] generateMove(Bead bead) {
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		List<int[]> myList = getPossibleMoves(getBoard());
 		Board board = getBoard();
 		// check if you have a winning move

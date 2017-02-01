@@ -67,8 +67,13 @@ public class Game extends Observable {
 		notifyObservers();
 	}
 	
-	public void tryMove(int x, int z, Bead bead) throws BadMoveException {
-		board.fallToPlace(x, z);
+	public boolean tryMove(int x, int z, Bead bead) {
+		try {
+			board.fallToPlace(x, z);
+			return true;
+		} catch (BadMoveException e) {
+			return false;
+		}
 	}
 
 	public boolean isTurn(Player player) {

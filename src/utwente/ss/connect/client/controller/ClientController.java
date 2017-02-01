@@ -9,8 +9,8 @@ import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.players.ComputerPlayer;
-import utwente.ss.connect.common.model.players.HumanPlayer;
 import utwente.ss.connect.common.model.players.Player;
+import utwente.ss.connect.common.model.strategies.NaiveStrategy;
 import utwente.ss.connect.common.model.strategies.SmartStrategy;
 
 public class ClientController {
@@ -86,9 +86,13 @@ public class ClientController {
 		}
 	}
 
-	public void askMove() throws BadMoveException {
-		int[] move = game.getCurrent().determineMove(game.getBoard());
-		game.tryMove(move[0], move[1], me.getBead());
+	public void askMove() {
+		int[] move = new int[2];
+		do {
+			move = game.getCurrent().determineMove(game.getBoard());
+			game.tryMove(move[0], move[1], me.getBead());
+		} while (!game.tryMove(move[0], move[1], me.getBead()));
+		
 		network.sendMessage(
 				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
 	}

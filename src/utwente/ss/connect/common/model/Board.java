@@ -163,8 +163,10 @@ public class Board {
 	 * @return boolean
 	 */
 	/*
-	 * @ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c * < getDIM(); 
-	 *          (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) == * m));
+	 * @ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c
+	 * * < getDIM(); (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) ==
+	 * * m));
+	 * 
 	 * @pure
 	 */
 	public boolean hasDepth(Bead bead) {
@@ -348,19 +350,19 @@ public class Board {
 		StringBuilder builder = new StringBuilder();
 		final String newLine = System.getProperty("line.separator");
 		final String tab = "   ";
-		
+
 		for (int i = 0; i < DIM; i++) {
 			builder.append("   z = " + (i) + "  " + tab + tab + tab + tab);
 		}
 		builder.append(newLine);
-		
+
 		for (int x = DIM - 1; x >= 0; x--) {
 			for (int z = 0; z < DIM; z++) {
 				builder.append(x + " ");
 				for (int y = 0; y < DIM; y++) {
 					builder.append(board[y][x][z].toString());
-					if(y != DIM -1) {
-						 builder.append(" | ");
+					if (y != DIM - 1) {
+						builder.append(" | ");
 					}
 				}
 				builder.append(tab);
@@ -369,10 +371,11 @@ public class Board {
 		}
 		for (int i = 0; i < DIM; i++) {
 			builder.append("  0    1    2    3   ");
-				if( i != 1) {
-					builder.append(" ");
-				}
+			if (i != 1) {
+				builder.append(" ");
+			}
 		}
+		builder.append(" <= x-axis\n");
 
 		return builder.toString();
 
