@@ -32,7 +32,7 @@ public class ClientHandlerController extends Thread {
 		this.server = server;
 
 		this.player = new Player();
-		this.player = new Player("Niek", new Bead(Colour.RED));
+//		this.player = new Player("Niek", new Bead(Colour.RED));
 	}
 
 	/**
@@ -89,13 +89,18 @@ public class ClientHandlerController extends Thread {
 		network.removeHandler(this);
 		isRunning = false;
 		try {
-			in.close();
-			out.close();
+			if (out != null) {
+				out.close();
+			}
+			if (in != null) {
+				in.close();
+			}
+			if (sock != null) {
+				sock.close();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			server.addMessage("IO Exception occured!");
 		}
-
 	}
 
 	/**
