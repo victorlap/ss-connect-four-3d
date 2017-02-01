@@ -41,5 +41,3 @@ public class ServerController {
 		controller.start();
 	}
 }
-
-//192.168.0.175
