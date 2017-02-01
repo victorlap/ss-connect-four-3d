@@ -14,7 +14,8 @@ public class Player {
 	}
 
 	public Player(String name) {
-		this.name = "" + (int) Math.random() * 5;
+		this.name = name;
+
 	}
 
 	public Player(String name, Bead bead) {

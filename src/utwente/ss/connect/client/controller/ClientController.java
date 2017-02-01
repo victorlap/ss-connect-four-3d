@@ -5,12 +5,18 @@ import java.net.InetAddress;
 
 import utwente.ss.connect.client.view.TuiView;
 import utwente.ss.connect.common.Protocol;
+import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
+<<<<<<< HEAD
 import utwente.ss.connect.common.controller.Game;
 import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.players.*;
 import utwente.ss.connect.common.model.strategies.*;
+=======
+import utwente.ss.connect.common.model.Game;
+import utwente.ss.connect.common.model.players.Player;
+>>>>>>> 46ccb0a9c01feac6af83a751596e5e17d66710b5
 
 public class ClientController {
 
@@ -60,6 +66,12 @@ public class ClientController {
 		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
+<<<<<<< HEAD
+=======
+
+		network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName()
+				+ Protocol.DELIM + "0 0 0 0");
+>>>>>>> 46ccb0a9c01feac6af83a751596e5e17d66710b5
 	}
 
 	public void startGame(String opponent) {
@@ -81,6 +93,7 @@ public class ClientController {
 	}
 
 	public void askMove() throws BadMoveException {
+<<<<<<< HEAD
 
 		int[] move = null;
 		if (game.getCurrent() instanceof HumanPlayer) {
@@ -91,14 +104,20 @@ public class ClientController {
 		}
 		game.doMove(move[0], move[1], me.getBead());
 		network.sendMessage(Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
+=======
+		int[] move = view.askMove();
+		game.tryMove(move[0], move[1], me.getBead());
+		network.sendMessage(
+				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
+>>>>>>> 46ccb0a9c01feac6af83a751596e5e17d66710b5
 	}
 
 	public void askStartAgain() {
 		if (view.askStartAgain()) {
 			game.reset();
 			game.addPlayer(me);
-			network.sendMessage(
-					Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + me.getName() + Protocol.DELIM + "0 0 0 0");
+			network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + me.getName()
+					+ Protocol.DELIM + "0 0 0 0");
 		} else {
 			shutdown();
 		}
@@ -120,7 +139,8 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController controller = new ClientController();
-		controller.addMessage("Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
+		controller.addMessage(
+				"Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
 
 		controller.start();
 	}

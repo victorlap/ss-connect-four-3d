@@ -18,30 +18,12 @@ public class TuiView {
 		in = new Scanner(System.in);
 	}
 
-	private boolean readBoolean(String prompt, String yes, String no) {
-		String answer;
-		do {
-			server.addMessage(prompt);
-			answer = in.nextLine();
-		} while (answer == null || (!answer.equals(yes) && !answer.equals(no)));
-		return answer.equals(yes);
-	}
-
 	private int readInteger(String prompt) {
 		Integer answer;
 		do {
 			server.addMessage(prompt);
 			answer = in.nextInt();
 		} while (answer == null);
-		return answer;
-	}
-
-	private String readString(String prompt) {
-		String answer = null;
-		do {
-			server.addMessage(prompt);
-			answer = in.nextLine();
-		} while (answer == null || answer.length() < 1);
 		return answer;
 	}
 

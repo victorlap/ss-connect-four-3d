@@ -131,7 +131,7 @@ public class Board {
 	// --- Rule methods ---
 
 	/**
-	 * Checks whether the given bead has a column
+	 * Checks whether the given bead has a column.
 	 * 
 	 * @param bead
 	 * @return boolean
@@ -157,16 +157,14 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead has a row in depth (Z axis)
+	 * Checks whether the given bead has a row in depth (Z axis).
 	 * 
 	 * @param bead
 	 * @return boolean
 	 */
 	/*
-	 * @ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c
-	 * < getDIM(); (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) ==
-	 * m));
-	 * 
+	 * @ensures \result == (\exists int r, c; r >= 0 & c >= 0 & r < getDIM() & c * < getDIM(); 
+	 *          (\forall int h; h >= 0 & h < getDIM(); getField(c, r, h) == * m));
 	 * @pure
 	 */
 	public boolean hasDepth(Bead bead) {
@@ -306,11 +304,11 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead forms a winning sequence
+	 * Checks whether the given bead forms a winning sequence.
 	 */
 	public boolean isWinner(Bead bead) {
-		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) || hasDiagonalYZ(bead) || hasDiagonalXY(bead)
-				|| hasDiagonalXZ(bead) || hasDiagXYZ(bead);
+		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) || hasDiagonalYZ(bead)
+				|| hasDiagonalXY(bead) || hasDiagonalXZ(bead) || hasDiagXYZ(bead);
 
 	}
 
@@ -382,7 +380,7 @@ public class Board {
 	public int getDIM() {
 		return DIM;
 	}
-	
+
 	public Board deepCopy() {
 		Board copy = new Board();
 		for (int x = 0; x < DIM; x++) {

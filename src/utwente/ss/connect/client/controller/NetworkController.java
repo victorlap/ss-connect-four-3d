@@ -38,7 +38,8 @@ public class NetworkController extends Thread implements Protocol {
 	public void run() {
 		try {
 
-			controller.addMessage("Connecting to server on " + server.getHostName() + ":" + port + ".");
+			controller.addMessage(
+					"Connecting to server on " + server.getHostName() + ":" + port + ".");
 
 			sock = new Socket(server, port);
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -47,7 +48,8 @@ public class NetworkController extends Thread implements Protocol {
 			isRunning = true;
 
 			// Start all communications
-			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + controller.getMe().getName() + DELIM + "0 0 0 0");
+			sendMessage(Protocol.CLIENT_JOINREQUEST + DELIM + controller.getMe().getName() + DELIM
+					+ "0 0 0 0");
 
 			while (isRunning) {
 				if (in.ready()) {
@@ -108,10 +110,10 @@ public class NetworkController extends Thread implements Protocol {
 	}
 
 	/**
-	 * Execute the given command from the server
+	 * Execute the given command from the server.
 	 * 
 	 * @param command
-	 * @throws BadMoveException 
+	 * @throws BadMoveException
 	 */
 	public void execute(String commandline) throws BadMoveException {
 		String[] commandlineSplit = commandline.split(" ");
@@ -150,7 +152,8 @@ public class NetworkController extends Thread implements Protocol {
 				controller.askMove();
 				break;
 			case SERVER_NOTIFYMOVE:
-				controller.addMessage(args[0] + " placed a move on x = " + args[1] + " y = " + args[2] + " z = " + args[3]);
+				controller.addMessage(args[0] + " placed a move on x = " + args[1] + " y = "
+						+ args[2] + " z = " + args[3]);
 				controller.notifyMove(args[1], args[3], args[0]);
 				break;
 			case SERVER_GAMEOVER:
@@ -174,7 +177,7 @@ public class NetworkController extends Thread implements Protocol {
 	}
 
 	/**
-	 * Gives back the opponents username
+	 * Gives back the opponents username.
 	 * 
 	 * @param one
 	 *            Username one

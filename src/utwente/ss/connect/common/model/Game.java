@@ -1,14 +1,16 @@
-package utwente.ss.connect.common.controller;
+package utwente.ss.connect.common.model;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Scanner;
 
 import utwente.ss.connect.common.exception.BadMoveException;
+<<<<<<< HEAD:src/utwente/ss/connect/common/controller/Game.java
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
 import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.players.ComputerPlayer;
+=======
+>>>>>>> 46ccb0a9c01feac6af83a751596e5e17d66710b5:src/utwente/ss/connect/common/model/Game.java
 import utwente.ss.connect.common.model.players.Player;
 
 public class Game extends Observable {
@@ -60,6 +62,7 @@ public class Game extends Observable {
 
 	public void doMove(int x, int z, Bead bead) throws BadMoveException {
 		int y = board.fallToPlace(x, z);
+<<<<<<< HEAD:src/utwente/ss/connect/common/controller/Game.java
 
 //		if (players.get(current) instanceof ComputerPlayer) {
 //			int[] coords = players.get(current).determineMove(board);
@@ -67,11 +70,17 @@ public class Game extends Observable {
 //			z = coords[1];
 //		}
 
+=======
+>>>>>>> 46ccb0a9c01feac6af83a751596e5e17d66710b5:src/utwente/ss/connect/common/model/Game.java
 		board.doMove(z, x, bead);
 		lastmove = players.get(current).getName() + " " + x + " " + y + " " + z;
 		current = (current + 1) % players.size();
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void tryMove(int x, int z, Bead bead) throws BadMoveException {
+		board.fallToPlace(x, z);
 	}
 
 	public boolean isTurn(Player player) {

@@ -30,9 +30,9 @@ public class Bead {
 	public String toString() {
 		return getColour().toString() + BEAD + RESET;
 	}
-	
-	public Colour next(Bead bead) {
-		switch(bead.getColour()) {
+
+	public Colour next(Bead b) {
+		switch (b.getColour()) {
 			case YELLOW:
 				return Colour.RED;
 			case RED:
