@@ -1,8 +1,10 @@
-package utwente.ss.connect.common.model;
+package utwente.ss.connect.common.model.players;
 
 import java.util.Scanner;
 
 import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Board;
 
 /**
  * @author Niek Khasuntsev

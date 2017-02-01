@@ -13,4 +13,16 @@ public enum Colour {
 	public String toString() {
 		return str;
 	}
+
+	public Colour next(Colour colour) {
+		switch(colour) {
+			case YELLOW:
+				return RED;
+			case RED:
+				return YELLOW;
+			default:
+				return EMPTY;
+
+		}
+	}
 }

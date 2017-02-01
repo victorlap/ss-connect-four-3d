@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import utwente.ss.connect.common.Protocol;
+import utwente.ss.connect.common.exception.BadMoveException;
 
 public class NetworkController extends Thread implements Protocol {
 
@@ -60,6 +61,9 @@ public class NetworkController extends Thread implements Protocol {
 			}
 		} catch (IOException e) {
 			shutdown();
+		} catch (BadMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		shutdown();
 	}
@@ -107,8 +111,9 @@ public class NetworkController extends Thread implements Protocol {
 	 * Execute the given command from the server
 	 * 
 	 * @param command
+	 * @throws BadMoveException 
 	 */
-	public void execute(String commandline) {
+	public void execute(String commandline) throws BadMoveException {
 		String[] commandlineSplit = commandline.split(" ");
 
 		String command = commandlineSplit[0];

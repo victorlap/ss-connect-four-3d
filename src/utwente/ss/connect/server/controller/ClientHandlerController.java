@@ -7,7 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Colour;
+import utwente.ss.connect.common.model.players.Player;
 
 public class ClientHandlerController extends Thread {
 
@@ -28,12 +31,9 @@ public class ClientHandlerController extends Thread {
 		this.server = server;
 
 		this.player = new Player();
+		this.player = new Player("Niek", new Bead(Colour.RED));
 	}
 
-	/**
-	 * Reads the messages in the socket connection. Each message will be
-	 * forwarded to the (Server) NetworkController
-	 */
 	public void run() {
 		try {
 			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -53,6 +53,9 @@ public class ClientHandlerController extends Thread {
 			}
 		} catch (IOException e) {
 			shutdown();
+		} catch (BadMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

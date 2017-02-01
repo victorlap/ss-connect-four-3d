@@ -1,32 +1,21 @@
 package utwente.ss.connect.common.controller;
 
+import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Scanner;
 
+import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Board;
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.model.Colour;
+import utwente.ss.connect.common.model.players.Player;
 
-public class Game {
+public class Game extends Observable {
 
-	// -- Instance variables -----------------------------------------
+	public Board board;
+	public ArrayList<Player> players;
 
-	public static final int NUMBER_PLAYERS = 2;
-
-	/*
-	 * @ private invariant board != null;
-	 */
-	/**
-	 * The board.
-	 */
-	private Board board;
-
-	/*
-	 * @ private invariant players.length == NUMBER_PLAYERS; private invariant
-	 * (\forall int i; 0 <= i && i < NUMBER_PLAYERS; players[i] != null);
-	 */
-	/**
-	 * The 2 players of the game.
-	 */
-	private Player[] players;
+	public boolean hasStarted;
 
 	/*
 	 * @ private invariant 0 <= current && current < NUMBER_PLAYERS;
@@ -35,115 +24,96 @@ public class Game {
 	 * Index of the current player.
 	 */
 	private int current;
-	
-	// -- Constructors -----------------------------------------------
 
-	/*
-	 * @ requires s0 != null; requires s1 != null;
-	 */
-	/**
-	 * Creates a new Game object.
-	 * 
-	 * @param s0
-	 *            the first player
-	 * @param s1
-	 *            the second player
-	 */
-	public Game(Player s0, Player s1) {
+	private String lastmove;
+
+	public Game() {
 		board = new Board();
-		players = new Player[NUMBER_PLAYERS];
-		players[0] = s0;
-		players[1] = s1;
+		players = new ArrayList<Player>();
 		current = 0;
 	}
 
-	// -- Commands ---------------------------------------------------
-
-	/**
-	 * Starts the Tic Tac Toe game. <br>
-	 * Asks after each ended game if the user want to continue. Continues until
-	 * the user does not want to play anymore.
-	 */
-	public void start() {
-		boolean doorgaan = true;
-		while (doorgaan) {
-			reset();
-			play();
-			doorgaan = readBoolean("\n> Play another time? (y/n)?", "y", "n");
-		}
+	public Board getBoard() {
+		return board;
 	}
 
-	/**
-	 * Prints a question which can be answered by yes (true) or no (false).
-	 * After prompting the question on standard out, this method reads a String
-	 * from standard in and compares it to the parameters for yes and no. If the
-	 * user inputs a different value, the prompt is repeated and te method reads
-	 * input again.
-	 * 
-	 * @parom prompt the question to print
-	 * @param yes
-	 *            the String corresponding to a yes answer
-	 * @param no
-	 *            the String corresponding to a no answer
-	 * @return true is the yes answer is typed, false if the no answer is typed
-	 */
-	private boolean readBoolean(String prompt, String yes, String no) {
-		String answer;
-		do {
-			System.out.print(prompt);
-			try (Scanner in = new Scanner(System.in)) {
-				answer = in.hasNextLine() ? in.nextLine() : null;
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+
+	public void removePlayer(Player player) {
+		players.remove(player);
+	}
+
+	public void removePlayer(String playerName) {
+		for (Player player : players) {
+			if (player.getName().equals(playerName)) {
+				players.remove(player);
 			}
-		} while (answer == null || (!answer.equals(yes) && !answer.equals(no)));
-		return answer.equals(yes);
+		}
 	}
 
-	/**
-	 * Resets the game. <br>
-	 * The board is emptied and player[0] becomes the current player.
-	 */
-	private void reset() {
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void doMove(int x, int z, Bead bead) throws BadMoveException {
+		int y = board.fallToPlace(x,z); 
+		board.doMove(z, x, bead);
+		lastmove = players.get(current).getName() + " " + x + " " + y + " " + z;
+		current = (current + 1) % players.size();
+		setChanged();
+		notifyObservers();
+	}
+
+	public boolean isTurn(Player player) {
+		return players.indexOf(player) == current;
+	}
+
+	public Player getCurrent() {
+		return players.get(current);
+	}
+
+	public boolean hasEnded() {
+		return board.gameOver();
+	}
+
+	public void start() {
+		hasStarted = true;
+	}
+	
+	public void reset() {
 		current = 0;
-		board.reset();
+		players = new ArrayList<>();
+		board = new Board();
 	}
 
-	/**
-	 * Plays the Tic Tac Toe game. <br>
-	 * First the (still empty) board is shown. Then the game is played until it
-	 * is over. Players can make a move one after the other. After each move,
-	 * the changed game situation is printed.
-	 */
-	private void play() {
-		update();
-		while (!board.gameOver()) {
-			players[current].makeMove(board);
-			update();
-			current = (current + 1) % NUMBER_PLAYERS;
+	public String getPlayerString() {
+		return players.get(0).getName() + " " + players.get(1).getName();
+	}
+
+	public String getLastMoveString() {
+		return lastmove;
+	}
+
+	public boolean hasWinner() {
+		return board.hasWinner();
+	}
+
+	public Player getWinner() {
+		if (board.isWinner(players.get(0).getBead())) {
+			return players.get(0);
 		}
-		printResult();
+		return players.get(1);
 	}
-
-	/**
-	 * Prints the game situation.
-	 */
-	private void update() {
-		System.out.println("\ncurrent game situation: \n\n" + board.toGrid() + "\n");
-	}
-
-	/*
-	 * @ requires this.board.gameOver();
-	 */
-
-	/**
-	 * Prints the result of the last game. <br>
-	 */
-	private void printResult() {
-		if (board.hasWinner()) {
-			Player winner = board.isWinner(players[0].getBead()) ? players[0] : players[1];
-			System.out.println("Speler " + winner.getName() + " (" + winner.getBead().getColour().toString() + ") has won!");
-		} else {
-			System.out.println("Draw. There is no winner!");
+	
+	public Player getPlayer(String name) {
+		for(Player player : players) {
+			if(player.getName().equals(name)) {
+				return player;
+			}
 		}
-
+		return null;
 	}
+
 }

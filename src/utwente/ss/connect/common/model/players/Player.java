@@ -1,21 +1,29 @@
-package utwente.ss.connect.common.model;
+package utwente.ss.connect.common.model.players;
+
+import utwente.ss.connect.common.model.Bead;
+import utwente.ss.connect.common.model.Board;
+import utwente.ss.connect.common.model.strategies.Strategy;
 
 public class Player {
 
 	protected String name;
 	protected Bead bead;
-
-	public Player() {
-		this("UNKOWN");
+	
+	public Player(){
+		this.name = "unknown";
 	}
-
-	public Player(String name) {
-		this(name, new Bead(Colour.EMPTY));
+	public Player(String name){
+		this.name = name;
 	}
 
 	public Player(String name, Bead bead) {
-		setName(name);
-		setBead(bead);
+		this.name = name;
+		this.bead = bead;
+	}
+
+	public Player(Strategy strategy, Bead bead) {
+		name = strategy.getName();
+		this.bead = bead; 
 	}
 
 	public void setName(String name) {

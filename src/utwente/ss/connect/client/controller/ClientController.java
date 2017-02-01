@@ -6,8 +6,9 @@ import utwente.ss.connect.client.view.TuiView;
 import utwente.ss.connect.common.Protocol;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
-import utwente.ss.connect.common.model.Game;
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.controller.Game;
+import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.players.Player;
 
 public class ClientController {
 
@@ -66,7 +67,7 @@ public class ClientController {
 		game.start();
 	}
 
-	public void notifyMove(String sx, String sz, String player) {
+	public void notifyMove(String sx, String sz, String player) throws BadMoveException {
 		try {
 			int x = Integer.parseInt(sx);
 			int z = Integer.parseInt(sz);
@@ -77,7 +78,7 @@ public class ClientController {
 		}
 	}
 
-	public void askMove() {
+	public void askMove() throws BadMoveException {
 		int[] move = view.askMove();
 		game.doMove(move[0], move[1], me.getBead());
 		network.sendMessage(Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
@@ -87,7 +88,8 @@ public class ClientController {
 		if (view.askStartAgain()) {
 			game.reset();
 			game.addPlayer(me);
-			network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + me.getName() + Protocol.DELIM + "0 0 0 0");
+			network.sendMessage(
+					Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + me.getName() + Protocol.DELIM + "0 0 0 0");
 		} else {
 			shutdown();
 		}
@@ -96,7 +98,7 @@ public class ClientController {
 	public void shutdown() {
 		network.shutdown();
 	}
-	
+
 	public Player getMe() {
 		return me;
 	}

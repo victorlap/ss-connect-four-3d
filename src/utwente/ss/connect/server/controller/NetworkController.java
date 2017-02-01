@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 import utwente.ss.connect.common.Protocol;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
-import utwente.ss.connect.common.model.Game;
-import utwente.ss.connect.common.model.Player;
+import utwente.ss.connect.common.controller.Game;
+import utwente.ss.connect.common.exception.BadMoveException;
+import utwente.ss.connect.common.model.players.Player;
 
 public class NetworkController extends Thread implements Protocol, Observer {
 
@@ -153,8 +154,9 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * 
 	 * @param command
 	 * @param sender
+	 * @throws BadMoveException
 	 */
-	public void execute(String commandline, ClientHandlerController sender) {
+	public void execute(String commandline, ClientHandlerController sender) throws BadMoveException {
 		controller.addMessage(commandline);
 		String[] commandlineSplit = commandline.split(" ");
 
@@ -163,39 +165,39 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		System.arraycopy(commandlineSplit, 1, args, 0, commandlineSplit.length - 1);
 
 		switch (command) {
-			case CLIENT_JOINREQUEST:
-				if (!isUsernameInUse(args[0])) {
-					sender.setName(args[0]);
-					broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
-				} else {
-					broadcast(SERVER_DENYREQUEST + DELIM + args[0], sender);
-				}
-				break;
-			case CLIENT_GAMEREQUEST:
-				addUserToGame(sender.getPlayer());
-				break;
-			case CLIENT_SETMOVE:
-				if (isTurn(sender.getPlayer())) {
-					try {
-						int x = Integer.parseInt(args[0]);
-						int y = Integer.parseInt(args[1]);
-						getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
-					} catch (NumberFormatException e) {
-						broadcast(SERVER_DENYMOVE, sender);
-					}
-				} else {
+		case CLIENT_JOINREQUEST:
+			if (!isUsernameInUse(args[0])) {
+				sender.setName(args[0]);
+				broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
+			} else {
+				broadcast(SERVER_DENYREQUEST + DELIM + args[0], sender);
+			}
+			break;
+		case CLIENT_GAMEREQUEST:
+			addUserToGame(sender.getPlayer());
+			break;
+		case CLIENT_SETMOVE:
+			if (isTurn(sender.getPlayer())) {
+				try {
+					int x = Integer.parseInt(args[0]);
+					int y = Integer.parseInt(args[1]);
+					getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
+				} catch (NumberFormatException e) {
 					broadcast(SERVER_DENYMOVE, sender);
 				}
-				break;
-			case CLIENT_SENDMESSAGE:
-			case CLIENT_REQUESTCHALLENGELIST:
-			case CLIENT_REQUESTCHALLENGE:
-			case CLIENT_ANSWERCHALLENGE:
-			case CLIENT_REQUESTLEADERBOARD:
-			case CLIENT_SETLEADERBOARD:
-			default:
-				broadcast(SERVER_INVALIDCOMMAND, sender);
-				break;
+			} else {
+				broadcast(SERVER_DENYMOVE, sender);
+			}
+			break;
+		case CLIENT_SENDMESSAGE:
+		case CLIENT_REQUESTCHALLENGELIST:
+		case CLIENT_REQUESTCHALLENGE:
+		case CLIENT_ANSWERCHALLENGE:
+		case CLIENT_REQUESTLEADERBOARD:
+		case CLIENT_SETLEADERBOARD:
+		default:
+			broadcast(SERVER_INVALIDCOMMAND, sender);
+			break;
 		}
 	}
 

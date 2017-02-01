@@ -5,14 +5,14 @@ import utwente.ss.connect.common.exception.BadMoveException;
 public class Board {
 
 	/**
-	 * DIMensions of the board
+	 * DIMensions of the board.
 	 */
 	private static final int DIM = 4;
 
 	/**
-	 * A board is actually a three DIMensional bead object array.
+	 * A board is actually a three Dimensional bead object array.
 	 */
-	static Bead[][][] board;
+	private Bead[][][] board;
 
 	public static Bead emptybead = new Bead(Colour.EMPTY);
 
@@ -32,22 +32,31 @@ public class Board {
 				}
 			}
 		}
-
 	}
 
 	/**
-	 * User provides X and Y coordinate and the system calculates how far the
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return Bead object on the place in the array
+	 */
+	public Bead getField(int x, int y, int z) {
+		return board[x][y][z];
+	}
+
+	/**
+	 * User provides X and Y coordinate and the system calculates how far the.
 	 * bead can fall and places the bead on the board
 	 */
-	public int doMove(int x, int z, Bead bead) {
+
+	public void doMove(int x, int z, Bead bead) {
 		try {
 			int y = fallToPlace(x, z);
 			board[x][y][z] = bead;
-			return y;
 		} catch (BadMoveException e) {
 			System.out.println("collumn full, try another collumn");
 		}
-		return -1;
 	}
 
 	/**
@@ -71,7 +80,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the board is full
+	 * Checks whether the board is full.
 	 */
 	public boolean isFull() {
 		boolean full = true;
@@ -95,7 +104,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead has a row
+	 * Checks whether the given bead has a row.
 	 * 
 	 * @param bead
 	 * @return boolean
@@ -180,7 +189,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead has a diagonal in the XY plane
+	 * Checks whether the given bead has a diagonal in the XY plane.
 	 */
 	public boolean hasDiagonalXY(Bead bead) {
 		boolean full;
@@ -210,7 +219,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead has a winning sequence through XZ
+	 * Checks whether the given bead has a winning sequence through XZ.
 	 */
 	public boolean hasDiagonalXZ(Bead bead) {
 		boolean full;
@@ -240,7 +249,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead has a winning sequence through YZ
+	 * Checks whether the given bead has a winning sequence through YZ.
 	 */
 	public boolean hasDiagonalYZ(Bead bead) {
 		boolean full;
@@ -270,10 +279,10 @@ public class Board {
 	}
 
 	/**
-	 * Checks whether the given bead forms a diagonal through XYZ
+	 * Checks whether the given bead forms a diagonal through XYZ.
 	 */
 	public boolean hasDiagXYZ(Bead bead) {
-
+		// Four different starting points
 		boolean diagonalTopLeft = true;
 		boolean diagonalTopRight = true;
 		boolean diagonalBottomLeft = true;
@@ -306,14 +315,14 @@ public class Board {
 	}
 
 	/**
-	 * Checks for both beads wether there is a winner
+	 * Checks for both beads wether there is a winner.
 	 */
 	public boolean hasWinner() {
 		return isWinner(new Bead(Colour.RED)) || isWinner(new Bead(Colour.YELLOW));
 	}
 
 	/**
-	 * Checks wether the game is over
+	 * Checks wether the game is over.
 	 */
 	public boolean gameOver() {
 		return isFull() || hasWinner();
@@ -334,7 +343,7 @@ public class Board {
 	}
 
 	/**
-	 * Build a grid out of the board
+	 * Build a grid out of the board.
 	 */
 	public String toGrid() {
 
@@ -358,7 +367,8 @@ public class Board {
 			}
 			builder.append(newLine);
 			for (int i = 0; i < DIM; i++) {
-				builder.append(i + " | ");
+				builder.append("  ");
+				builder.append(i + " |");
 			}
 			builder.append(newLine);
 			builder.append(newLine);
@@ -370,8 +380,18 @@ public class Board {
 	}
 
 	public int getDIM() {
-		// TODO Auto-generated method stub
 		return DIM;
 	}
-
+	
+	public Board deepCopy() {
+		Board copy = new Board();
+		for (int x = 0; x < DIM; x++) {
+			for (int y = 0; y < DIM; y++) {
+				for (int z = 0; z < DIM; z++) {
+					copy.board[x][y][z] = this.board[x][y][z];
+				}
+			}
+		}
+		return copy;
+	}
 }
