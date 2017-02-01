@@ -46,6 +46,14 @@ public class TuiView {
 		return port;
 	}
 	
+	public int getPlayerType() {
+		int player = -1;
+		do {
+			player = readInteger("What kind of player are you? enter 0 for human player, 1 for naive computerplayer, 2 for smart computerplayer:") ;
+		} while (player == -1);
+		return player;
+	}
+	
 	private boolean readBoolean(String prompt, String yes, String no) {
 		String answer;
 		do {

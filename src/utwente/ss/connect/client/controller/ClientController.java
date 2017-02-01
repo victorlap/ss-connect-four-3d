@@ -9,6 +9,7 @@ import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
 import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.players.ComputerPlayer;
+import utwente.ss.connect.common.model.players.HumanPlayer;
 import utwente.ss.connect.common.model.players.Player;
 import utwente.ss.connect.common.model.strategies.NaiveStrategy;
 import utwente.ss.connect.common.model.strategies.SmartStrategy;
@@ -46,8 +47,21 @@ public class ClientController {
 
 	public void start() {
 		InetAddress address = view.connectServer();
-		me = new ComputerPlayer(new SmartStrategy());
 		int port = view.getPort();
+		
+		int player = view.getPlayerType();
+
+		switch (player) {
+		case 0:
+			me = new HumanPlayer();
+			break;
+		case 1:
+			me = new ComputerPlayer(new NaiveStrategy());
+			break;
+		case 2:
+			me = new ComputerPlayer(new SmartStrategy());
+			break;
+		}
 
 		me.setName(view.getPlayername());
 
