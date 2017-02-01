@@ -20,15 +20,15 @@ public class Board {
 
 	/*
 	 * @ invariant (\forall int x, y, z; 0 <= x & x < getDIM() & 0 <= y & y <
-	 * getDIM() & 0 <= z & z < getDIM(); getField(x, y, z) == Bead(Colour.Empty)
-	 * || getField(x, y, z) == Bead(Colour.Red) || getField(x, y, z) ==
-	 * Bead(Colour.Yellow));
+	 getDIM() & 0 <= z & z < getDIM(); getField(x, y, z) == Bead(Colour.Empty)
+	 || getField(x, y, z) == Bead(Colour.Red) || getField(x, y, z) ==
+	 Bead(Colour.Yellow));
 	 */
 
 	/*
 	 * @ ensures (\forall int x, y, z; 0 <= x & x < getDIM() & 0 <= y & y <
-	 * getDIM() & 0 <= z & z < getDIM(); getField(x, y, z) ==
-	 * Bead(Colour.Empty);
+	 getDIM() & 0 <= z & z < getDIM(); getField(x, y, z) ==
+	 Bead(Colour.Empty);
 	 */
 	public Board() {
 		board = new Bead[DIM][DIM][DIM];
@@ -42,7 +42,7 @@ public class Board {
 	}
 
 	/*
-	 * @ ensures (\forall int x, y, z; 0 <= x & x < getDIM() & x <= y & y <
+	 *@ ensures (\forall int x, y, z; 0 <= x & x < getDIM() & x <= y & y <
 	 * getDIM() & 0 <= z & z < getDIM(); getField (x, y, z) ==
 	 * Bead(Colour.EMPTY);
 	 */
@@ -68,8 +68,8 @@ public class Board {
 	 */
 
 	/*
-	 * @requires x >= 0 & x < getDIM(); && y >= 0 & y < getDIM() && z >= 0 & z <
-	 * getDIM();
+	 *@requires x >= 0 & x < getDIM(); && y >= 0 & y < getDIM() && z >= 0 & z <
+	  getDIM();
 	 * 
 	 * @pure
 	 */
@@ -83,10 +83,9 @@ public class Board {
 	 */
 
 	/*
-	 * @requires x >= 0 & x < getDIM() && z >= 0 & z < getDIM();
-	 * 
-	 * @ensures (\exists int y; y >= 0 & y < getDIM(); getField(x, y, z) ==
-	 * bead);
+	 *@requires x >= 0 & x < getDIM() && z >= 0 & z < getDIM();
+	 @ensures (\exists int y; y >= 0 & y < getDIM(); getField(x, y, z) ==
+	 bead);
 	 */
 	public void doMove(int x, int z, Bead bead) {
 		try {
@@ -107,10 +106,9 @@ public class Board {
 	 */
 
 	/*
-	 * @requires x >= 0 & x < getDIM() && z >= 0 & z < getDIM();
-	 * 
-	 * @ensures (\exists int y; y >= 0 & y < getDIM(); getField(x, y, z) ==
-	 * bead);
+	 *@requires x >= 0 & x < getDIM() && z >= 0 & z < getDIM();
+	 @ensures (\exists int y; y >= 0 & y < getDIM(); getField(x, y, z) ==
+	 bead);
 	 */
 	public int fallToPlace(int x, int z) throws BadMoveException {
 		int y = 0;
@@ -129,9 +127,9 @@ public class Board {
 	 */
 
 	/*
-	 * @ ensures (\forall int x, y, z; 0 <= x & x < getDIM() & x <= y & y <
-	 * getDIM() & 0 <= z & z < getDIM(); getField (x, y, z) !=
-	 * Bead(Colour.EMPTY);
+	 *@ ensures (\forall int x, y, z; 0 <= x & x < getDIM() & x <= y & y <
+	 getDIM() & 0 <= z & z < getDIM(); getField (x, y, z) !=
+	 Bead(Colour.EMPTY);
 	 */
 	public boolean isFull() {
 		boolean full = true;
@@ -148,8 +146,8 @@ public class Board {
 	}
 
 	/*
-	 * @ ensures (int x, y, z; 0 <= x & x < getDIM() & x <= y & y < getDIM() & 0
-	 * <= z & z < getDIM(); getField (x, y, z) == Bead(Colour.EMPTY);
+	 *@ ensures (int x, y, z; 0 <= x & x < getDIM() & x <= y & y < getDIM() & 0
+	 <= z & z < getDIM(); getField (x, y, z) == Bead(Colour.EMPTY);
 	 */
 	public boolean isEmptyField(int x, int y, int z) {
 		if (board[x][y][z].getColour().equals(Colour.EMPTY)) {
@@ -167,9 +165,9 @@ public class Board {
 	 * @return boolean
 	 */
 	/*
-	 * @ensures \result == (\exists int x, z; x >= 0 & z >= 0 & x < getDIM() & z
-	 * < getDIM(); (\forall int y; y >= 0 & y < getDIM(); getField(x, y , z) ==
-	 * bead;
+	 *@ensures \result == (\exists int x, z; x >= 0 & z >= 0 & x < getDIM() & z
+	 < getDIM(); (\forall int y; y >= 0 & y < getDIM(); getField(x, y , z) ==
+	 bead;
 	 * 
 	 */
 	public boolean hasRow(Bead bead) {
@@ -199,11 +197,11 @@ public class Board {
 	 */
 
 	/*
-	 * @ensures \result == (\exists int y, z; y >= 0 & h >= 0 & y < getDIM() & z
-	 * < getDIM(); (\forall int x; x >= 0 & x < getDIM(); getField(x, y, z) ==
-	 * bead));
+	 *@ensures \result == (\exists int y, z; y >= 0 & h >= 0 & y < getDIM() & z
+	 < getDIM(); (\forall int x; x >= 0 & x < getDIM(); getField(x, y, z) ==
+	 bead));
 	 * 
-	 * @pure
+	 @pure
 	 */
 	public boolean hasColumn(Bead bead) {
 		boolean full;
@@ -231,9 +229,9 @@ public class Board {
 	 * @return boolean
 	 */
 	/*
-	 * @ensures \result == (\exists int y, x; y >= 0 & x >= 0 & y < getDIM() & x
-	 * < getDIM(); (\forall int z; z >= 0 & z < getDIM(); getField(x, y, z) ==
-	 * bead));
+	 *@ensures \result == (\exists int y, x; y >= 0 & x >= 0 & y < getDIM() & x
+	 < getDIM(); (\forall int z; z >= 0 & z < getDIM(); getField(x, y, z) ==
+	 bead));
 	 * 
 	 */
 	public boolean hasDepth(Bead bead) {
@@ -259,9 +257,9 @@ public class Board {
 	 * Checks whether the given bead has a diagonal in the XY plane.
 	 */
 	/*
-	 * @ensures \result == (\exists int z; z >= 0 & z < getDIM(); (\forall int
-	 * xy; xy >= 0 & xy < getDIM(); getField(xy, xy, z) == m) || (\forall int
-	 * xy; xy >= 0 & rc < getDIM(); getField(xy, xy - getDIM(), z) == bead));
+	 *@ensures \result == (\exists int z; z >= 0 & z < getDIM(); (\forall int
+	 xy; xy >= 0 & xy < getDIM(); getField(xy, xy, z) == m) || (\forall int
+	 xy; xy >= 0 & rc < getDIM(); getField(xy, xy - getDIM(), z) == bead));
 	 */
 	public boolean hasDiagonalXY(Bead bead) {
 		boolean full;
@@ -294,9 +292,9 @@ public class Board {
 	 * Checks whether the given bead has a winning sequence through XZ.
 	 */
 	/*
-	 * @ensures \result == (\exists int y; y >= 0 & y < getDIM(); (\forall int
-	 * xz; xz >= 0 & xz < getDIM(); getField(xz, y, xz) == m) || (\forall int
-	 * xz; xz >= 0 & xz < getDIM(); getField(xz, y - getDIM(), xz) == bead));
+	 *@ensures \result == (\exists int y; y >= 0 & y < getDIM(); (\forall int
+	 xz; xz >= 0 & xz < getDIM(); getField(xz, y, xz) == m) || (\forall int
+	 xz; xz >= 0 & xz < getDIM(); getField(xz, y - getDIM(), xz) == bead));
 	 * 
 	 * @pure
 	 */
@@ -331,9 +329,9 @@ public class Board {
 	 * Checks whether the given bead has a winning sequence through YZ.
 	 */
 	/*
-	 * @ensures \result == (\exists int z; z >= 0 & z < getDIM(); (\forall int
-	 * xy; xy >= 0 & xy < getDIM(); getField(xy, xy, z) == bead) || (\forall int
-	 * xy; xy >= 0 & xy < getDIM(); getField(xy, xy - getDIM(), z) == bead));
+	 *@ensures \result == (\exists int z; z >= 0 & z < getDIM(); (\forall int
+	 xy; xy >= 0 & xy < getDIM(); getField(xy, xy, z) == bead) || (\forall int
+	 xy; xy >= 0 & xy < getDIM(); getField(xy, xy - getDIM(), z) == bead));
 	 * 
 	 * @pure
 	 */
@@ -368,11 +366,11 @@ public class Board {
 	 * Checks whether the given bead forms a diagonal through XYZ.
 	 */
 	/*
-	 * @ensures \result == (\forall int i; i >= 0 & i < getDIM(); getField(i, i,
-	 * i) == bead) || (\forall int i; i >= 0 & i < getDIM(); getField(i -
-	 * getDIM(), i, i) == bead) || (\forall int i; i >= 0 & i < getDIM();
-	 * getField(i, i - getDIM(), i) == bead) || (\forall int i; i >= 0 & i <
-	 * getDIM(); getField(i - getDIM(), i - getDIM(), i) == bead);
+	 *@ensures \result == (\forall int i; i >= 0 & i < getDIM(); getField(i, i,
+	 i) == bead) || (\forall int i; i >= 0 & i < getDIM(); getField(i -
+	 getDIM(), i, i) == bead) || (\forall int i; i >= 0 & i < getDIM();
+	 getField(i, i - getDIM(), i) == bead) || (\forall int i; i >= 0 & i <
+	 getDIM(); getField(i - getDIM(), i - getDIM(), i) == bead);
 	 * 
 	 * @pure
 	 */
@@ -404,11 +402,11 @@ public class Board {
 	 * Checks whether the given bead forms a winning sequence.
 	 */
 	/*
-	 * @requires m != Mark.EMPTY;
+	 *@requires m != Mark.EMPTY;
 	 * 
-	 * @ensures \result == hasRow(bead) || hasColumn(bead) || hasHeight(bead) ||
-	 * hasRowHeight(bead) || hasRowColumn(bead) || hasColumnHeight(bead) ||
-	 * hasRowColumnHeight(bead);
+	 *@ensures \result == hasRow(bead) || hasColumn(bead) || hasHeight(bead) ||
+	 hasRowHeight(bead) || hasRowColumn(bead) || hasColumnHeight(bead) ||
+	 hasRowColumnHeight(bead);
 	 */
 	// @pure
 	public boolean isWinner(Bead bead) {
@@ -421,7 +419,7 @@ public class Board {
 	 * Checks for both beads wether there is a winner.
 	 */
 	/*
-	 * @ensures \result == isWinner(Mark.O) || isWinner(Mark.X);
+	 *@ensures \result == isWinner(Mark.O) || isWinner(Mark.X);
 	 */
 	public boolean hasWinner() {
 		return isWinner(new Bead(Colour.RED)) || isWinner(new Bead(Colour.YELLOW));
@@ -431,7 +429,7 @@ public class Board {
 	 * Checks wether the game is over.
 	 */
 	/*
-	 * @ensures \result == isFull() || hasWinner();
+	 *@ensures \result == isFull() || hasWinner();
 	 */
 	public boolean gameOver() {
 		return isFull() || hasWinner();
