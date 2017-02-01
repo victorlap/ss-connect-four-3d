@@ -1,11 +1,9 @@
-package utwente.ss.connect.common.controller;
+package utwente.ss.connect.common.model;
 
 import java.util.ArrayList;
 import java.util.Observable;
 
 import utwente.ss.connect.common.exception.BadMoveException;
-import utwente.ss.connect.common.model.Bead;
-import utwente.ss.connect.common.model.Board;
 import utwente.ss.connect.common.model.players.Player;
 
 public class Game extends Observable {
@@ -62,6 +60,10 @@ public class Game extends Observable {
 		current = (current + 1) % players.size();
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void tryMove(int x, int z, Bead bead) throws BadMoveException {
+		board.fallToPlace(x, z);
 	}
 
 	public boolean isTurn(Player player) {

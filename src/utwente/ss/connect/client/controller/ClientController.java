@@ -4,10 +4,10 @@ import java.net.InetAddress;
 
 import utwente.ss.connect.client.view.TuiView;
 import utwente.ss.connect.common.Protocol;
-import utwente.ss.connect.common.controller.Game;
 import utwente.ss.connect.common.exception.BadMoveException;
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
+import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.players.Player;
 
 public class ClientController {
@@ -83,7 +83,7 @@ public class ClientController {
 
 	public void askMove() throws BadMoveException {
 		int[] move = view.askMove();
-		game.doMove(move[0], move[1], me.getBead());
+		game.tryMove(move[0], move[1], me.getBead());
 		network.sendMessage(
 				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
 	}

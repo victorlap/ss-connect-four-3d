@@ -2,6 +2,7 @@ package utwente.ss.connect.common.controller;
 
 import utwente.ss.connect.common.model.Bead;
 import utwente.ss.connect.common.model.Colour;
+import utwente.ss.connect.common.model.Game;
 import utwente.ss.connect.common.model.players.ComputerPlayer;
 import utwente.ss.connect.common.model.players.HumanPlayer;
 import utwente.ss.connect.common.model.players.Player;
