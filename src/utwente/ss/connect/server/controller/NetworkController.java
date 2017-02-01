@@ -100,6 +100,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		Game g = getGame(handler.getPlayer());
 		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(),
 				getHandlers(g.getPlayers()));
+		controller.addMessage("CONNETION LOSTTTSTSTSTSTSTSTST");
 
 		g.removePlayer(handler.getPlayer());
 		clients.remove(handler);
@@ -191,10 +192,13 @@ public class NetworkController extends Thread implements Protocol, Observer {
 				}
 				if (isTurn(sender.getPlayer())) {
 					try {
+						controller.addMessage(command);
 						int x = Integer.parseInt(args[0]);
 						int y = Integer.parseInt(args[1]);
 						getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
 					} catch (NumberFormatException e) {
+						broadcast(SERVER_INVALIDCOMMAND, sender);
+					} catch (BadMoveException e) {
 						broadcast(SERVER_DENYMOVE, sender);
 					}
 				} else {
