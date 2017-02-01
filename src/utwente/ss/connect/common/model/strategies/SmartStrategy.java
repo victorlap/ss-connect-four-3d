@@ -11,6 +11,8 @@ public class SmartStrategy extends Strategy {
 		super();
 	}
 
+	private Bead nextBead;
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -19,6 +21,7 @@ public class SmartStrategy extends Strategy {
 
 	@Override
 	public int[] generateMove(Bead bead) {
+		nextBead = new Bead(bead.next(bead));
 //		try {
 //			Thread.sleep(2000);
 //		} catch (InterruptedException e) {
@@ -31,8 +34,8 @@ public class SmartStrategy extends Strategy {
 		// check if the enemy has a winning move
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
-			temp.doMove(myList.get(i)[0], myList.get(i)[1], new Bead(bead.next(bead)));
-			if (temp.isWinner(new Bead(bead.next(bead)))) {
+			temp.doMove(myList.get(i)[0], myList.get(i)[1], nextBead);
+			if (temp.isWinner(nextBead)) {
 				return myList.get(i);
 			}
 		}
@@ -55,8 +58,8 @@ public class SmartStrategy extends Strategy {
 			List<int[]> futureList = getPossibleMoves(temp);
 			boolean valid = true;
 			for (int j = 0; j < futureList.size(); j++) {
-				temp.doMove(futureList.get(j)[0], futureList.get(j)[1], new Bead(bead.next(bead)));
-				if (temp.isWinner(new Bead(bead.next(bead)))) {
+				temp.doMove(futureList.get(j)[0], futureList.get(j)[1], nextBead);
+				if (temp.isWinner(nextBead)) {
 					valid = false;
 				}
 			}
