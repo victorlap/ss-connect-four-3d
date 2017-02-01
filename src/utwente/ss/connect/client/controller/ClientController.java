@@ -97,8 +97,7 @@ public class ClientController {
 		if (view.askStartAgain()) {
 			game.reset();
 			game.addPlayer(me);
-			network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + me.getName()
-					+ Protocol.DELIM + "0 0 0 0");
+			network.sendMessage(Protocol.CLIENT_GAMEREQUEST);
 		} else {
 			shutdown();
 		}
