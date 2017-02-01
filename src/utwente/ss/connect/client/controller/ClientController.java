@@ -64,12 +64,12 @@ public class ClientController {
 
 		game.addPlayer(me);
 
-		network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName()
-				+ Protocol.DELIM + "0 0 0 0");
+		network.sendMessage(
+				Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName() + Protocol.DELIM + "0 0 0 0");
 	}
 
 	public void startGame(String opponent) {
-		game.addPlayer( new ComputerPlayer(new SmartStrategy(), opponent));
+		game.addPlayer(new ComputerPlayer(new SmartStrategy(), opponent));
 		game.getPlayers().get(0).setBead(new Bead(Colour.RED));
 		game.getPlayers().get(1).setBead(new Bead(Colour.YELLOW));
 		game.start();
@@ -92,9 +92,8 @@ public class ClientController {
 			move = game.getCurrent().determineMove(game.getBoard());
 			game.tryMove(move[0], move[1], me.getBead());
 		} while (!game.tryMove(move[0], move[1], me.getBead()));
-		
-		network.sendMessage(
-				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
+
+		network.sendMessage(Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
 	}
 
 	public void askStartAgain() {
@@ -123,8 +122,7 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController controller = new ClientController();
-		controller.addMessage(
-				"Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
+		controller.addMessage("Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
 
 		controller.start();
 	}

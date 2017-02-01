@@ -12,7 +12,7 @@ public class SmartStrategy extends Strategy {
 	}
 
 	private Bead nextBead;
-	
+
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -22,15 +22,15 @@ public class SmartStrategy extends Strategy {
 	@Override
 	public int[] generateMove(Bead bead) {
 		nextBead = new Bead(bead.next(bead));
-//		try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// Thread.sleep(2000);
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		List<int[]> myList = getPossibleMoves(getBoard());
 		Board board = getBoard();
-		
+
 		// check if the enemy has a winning move
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
@@ -39,8 +39,7 @@ public class SmartStrategy extends Strategy {
 				return myList.get(i);
 			}
 		}
-		
-		
+
 		// check if you have a winning move
 		for (int i = 0; i < myList.size(); i++) {
 			Board temp = board.deepCopy();
@@ -49,6 +48,7 @@ public class SmartStrategy extends Strategy {
 				return myList.get(i);
 			}
 		}
+
 		// for all possible moves, check if the move you're going to make
 		// creates a win condition for the enemy
 		List<int[]> safeMoves = new ArrayList<int[]>();

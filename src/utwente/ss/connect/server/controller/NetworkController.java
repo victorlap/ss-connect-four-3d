@@ -37,8 +37,8 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		this.controller = controller;
 		this.port = port;
 
-		this.clients = new ArrayList<>();
-		this.games = new ArrayList<>();
+		this.clients = new ArrayList<ClientHandlerController>();
+		this.games = new ArrayList<Game>();
 	}
 
 	/**

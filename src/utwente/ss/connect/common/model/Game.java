@@ -92,7 +92,7 @@ public class Game extends Observable {
 
 	public void reset() {
 		current = 0;
-		players = new ArrayList<>();
+		players = new ArrayList<Player >();
 		board = new Board();
 	}
 	
