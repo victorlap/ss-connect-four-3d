@@ -8,6 +8,7 @@ public class Player {
 
 	protected String name;
 	protected Bead bead;
+	protected int thinkingTime;
 
 	public Player() {
 		this.name = "unknown";
@@ -40,8 +41,8 @@ public class Player {
 		this.bead = bead;
 	}
 
+	//@pure
 	public Bead getBead() {
-
 		return bead;
 	}
 
@@ -66,5 +67,17 @@ public class Player {
 	public void makeMove(Board board) {
 		int[] keuze = determineMove(board);
 		board.doMove(keuze[0], keuze[1], getBead());
+	}
+	
+	public void setThinkingTime(int seconds) {
+		this.thinkingTime = seconds;
+	}
+	
+	public void think() {
+		try {
+			Thread.sleep(thinkingTime * 1000);
+		} catch (InterruptedException e) {
+			// Proceed
+		}
 	}
 }

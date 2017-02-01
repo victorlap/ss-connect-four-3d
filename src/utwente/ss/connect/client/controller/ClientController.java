@@ -42,25 +42,28 @@ public class ClientController {
 	 * Handle dead connections.
 	 */
 	public void deadConnection() {
-		// TODO
+		addMessage("Connection to the server is lost.");
+		System.exit(0);
 	}
 
 	public void start() {
 		InetAddress address = view.connectServer();
 		int port = view.getPort();
-		
+
 		int player = view.getPlayerType();
 
 		switch (player) {
-		case 0:
-			me = new HumanPlayer();
-			break;
-		case 1:
-			me = new ComputerPlayer(new NaiveStrategy());
-			break;
-		case 2:
-			me = new ComputerPlayer(new SmartStrategy());
-			break;
+			case 0:
+				me = new HumanPlayer();
+				break;
+			case 1:
+				me = new ComputerPlayer(new NaiveStrategy());
+				me.setThinkingTime(view.getThinkingTime());
+				break;
+			case 2:
+				me = new ComputerPlayer(new SmartStrategy());
+				me.setThinkingTime(view.getThinkingTime());
+				break;
 		}
 
 		me.setName(view.getPlayername());
@@ -78,8 +81,8 @@ public class ClientController {
 
 		game.addPlayer(me);
 
-		network.sendMessage(
-				Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName() + Protocol.DELIM + "0 0 0 0");
+		network.sendMessage(Protocol.CLIENT_JOINREQUEST + Protocol.DELIM + getMe().getName()
+				+ Protocol.DELIM + "0 0 0 0");
 	}
 
 	public void startGame(String opponent) {
@@ -107,7 +110,8 @@ public class ClientController {
 			game.tryMove(move[0], move[1], me.getBead());
 		} while (!game.tryMove(move[0], move[1], me.getBead()));
 
-		network.sendMessage(Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
+		network.sendMessage(
+				Protocol.CLIENT_SETMOVE + Protocol.DELIM + move[0] + Protocol.DELIM + move[1]);
 	}
 
 	public void askStartAgain() {
@@ -136,7 +140,8 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController controller = new ClientController();
-		controller.addMessage("Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
+		controller.addMessage(
+				"Connect Four 3D Client by Victor Lap & Niek Khasuntsev " + "\u00a9 2017\n");
 
 		controller.start();
 	}

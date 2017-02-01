@@ -48,7 +48,8 @@ public class HumanPlayer extends Player {
 				} else if (input.equals("y")) {
 					strategy = new SmartStrategy();
 					int[] possible = strategy.generateMove(getBead());
-					System.out.println("Psst! Look at:  x = " + possible[0] + " and z = " + possible[1] + " ;)");
+					System.out.println("Psst! Look at:  x = " + possible[0] + " and z = "
+							+ possible[1] + " ;)");
 					valid = true;
 				} else {
 					throw new BadMoveException();

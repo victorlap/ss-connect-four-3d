@@ -36,7 +36,7 @@ public class Board {
 	}
 
 	// --- Commands ---
-
+	//@pure
 	public int getDIM() {
 		return DIM;
 	}
@@ -410,8 +410,8 @@ public class Board {
 	 */
 	// @pure
 	public boolean isWinner(Bead bead) {
-		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) || hasDiagonalYZ(bead) || hasDiagonalXY(bead)
-				|| hasDiagonalXZ(bead) || hasDiagXYZ(bead);
+		return hasRow(bead) || hasColumn(bead) || hasDepth(bead) || hasDiagonalYZ(bead) 
+				|| hasDiagonalXY(bead) || hasDiagonalXZ(bead) || hasDiagXYZ(bead);
 
 	}
 
@@ -447,7 +447,7 @@ public class Board {
 		final String tab = "   ";
 
 		for (int i = 0; i < DIM; i++) {
-			builder.append("   z = " + (i) + "  " + tab + tab + tab + tab);
+			builder.append("   z = " + i + "  " + tab + tab + tab + tab);
 		}
 		builder.append(newLine);
 

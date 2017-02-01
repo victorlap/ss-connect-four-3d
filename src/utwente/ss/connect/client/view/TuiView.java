@@ -49,7 +49,19 @@ public class TuiView {
 	public int getPlayerType() {
 		int player = -1;
 		do {
-			player = readInteger("What kind of player are you? enter 0 for human player, 1 for naive computerplayer, 2 for smart computerplayer:") ;
+			player = readInteger(
+					"What kind of player are you? "
+					+ "enter 0 for human player, "
+					+ "1 for naive computerplayer, "
+					+ "2 for smart computerplayer:");
+		} while (player == -1);
+		return player;
+	}
+	
+	public int getThinkingTime() {
+		int player = -1;
+		do {
+			player = readInteger("The computer must think for how many seconds?");
 		} while (player == -1);
 		return player;
 	}
