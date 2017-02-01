@@ -25,8 +25,8 @@ public class ClientController {
 	private NetworkController network;
 
 	public ClientController() {
-		game = new Game();
 		view = new TuiView(this);
+		game = new Game();
 	}
 
 	/**
