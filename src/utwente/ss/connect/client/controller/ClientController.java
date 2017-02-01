@@ -43,12 +43,14 @@ public class ClientController {
 
 	public void start() {
 		InetAddress address = view.connectServer();
+		int port = view.getPort();
+
 		me = new Player();
 		me.setName(view.getPlayername());
 
 		game.addPlayer(me);
 
-		network = new NetworkController(address, this);
+		network = new NetworkController(address, port, this);
 		network.start();
 	}
 

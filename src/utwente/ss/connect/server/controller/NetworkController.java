@@ -170,6 +170,10 @@ public class NetworkController extends Thread implements Protocol, Observer {
 
 		switch (command) {
 			case CLIENT_JOINREQUEST:
+				if (args.length < 1) {
+					broadcast(SERVER_INVALIDCOMMAND, sender);
+					break;
+				}
 				if (!isUsernameInUse(args[0])) {
 					sender.getPlayer().setName(args[0]);
 					broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
@@ -181,6 +185,10 @@ public class NetworkController extends Thread implements Protocol, Observer {
 				addUserToGame(sender.getPlayer());
 				break;
 			case CLIENT_SETMOVE:
+				if (args.length < 2) {
+					broadcast(SERVER_INVALIDCOMMAND, sender);
+					break;
+				}
 				if (isTurn(sender.getPlayer())) {
 					try {
 						int x = Integer.parseInt(args[0]);

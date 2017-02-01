@@ -1,11 +1,9 @@
 package utwente.ss.connect.server.view;
 
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
 import java.util.Scanner;
 
 import utwente.ss.connect.common.Protocol;
+import utwente.ss.connect.common.Util;
 import utwente.ss.connect.server.controller.ServerController;
 
 public class TuiView {
@@ -23,6 +21,7 @@ public class TuiView {
 		do {
 			server.addMessage(prompt);
 			answer = in.nextInt();
+			in.nextLine();
 		} while (answer == null);
 		return answer;
 	}
@@ -32,44 +31,10 @@ public class TuiView {
 		do {
 			port = readInteger("Enter the port, enter 0 for default:" 
 					+ " [" + Protocol.PORTNUMBER + "]");
-		} while (port != -1 && !available(port));
+		} while (port != -1 && !Util.available(port));
 		if (port == 0) {
 			return Protocol.PORTNUMBER;
 		}
 		return port;
-	}
-
-	/**
-	 * Checks to see if a specific port is available.
-	 * http://stackoverflow.com/questions/434718/sockets-discover-port-availability-using-java
-	 *
-	 * @param port
-	 *            the port to check for availability
-	 */
-	public static boolean available(int port) {
-		ServerSocket ss = null;
-		DatagramSocket ds = null;
-		try {
-			ss = new ServerSocket(port);
-			ss.setReuseAddress(true);
-			ds = new DatagramSocket(port);
-			ds.setReuseAddress(true);
-			return true;
-		} catch (IOException e) {
-		} finally {
-			if (ds != null) {
-				ds.close();
-			}
-
-			if (ss != null) {
-				try {
-					ss.close();
-				} catch (IOException e) {
-					/* should not be thrown */
-				}
-			}
-		}
-
-		return false;
 	}
 }
