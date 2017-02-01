@@ -22,6 +22,10 @@ public class HumanPlayer extends Player {
 	public HumanPlayer(String name, Bead bead) {
 		super(name, bead);
 	}
+	
+	public HumanPlayer(){
+		super();
+	}
 	// -- Commands ---------------------------------------------------
 
 	@Override

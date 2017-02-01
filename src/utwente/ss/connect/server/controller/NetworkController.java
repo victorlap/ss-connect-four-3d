@@ -55,10 +55,8 @@ public class NetworkController extends Thread implements Protocol, Observer {
 			while (isRunning) {
 
 				Socket newSocket = sock.accept();
-				ClientHandlerController newHandler = new ClientHandlerController(this, newSocket,
-						controller);
-				controller.addMessage(
-						"New Connection from: " + newSocket.getInetAddress().getHostName());
+				ClientHandlerController newHandler = new ClientHandlerController(this, newSocket, controller);
+				controller.addMessage("New Connection from: " + newSocket.getInetAddress().getHostName());
 				addHandler(newHandler);
 				newHandler.start();
 			}
@@ -98,8 +96,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 */
 	public void removeHandler(ClientHandlerController handler) {
 		Game g = getGame(handler.getPlayer());
-		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(),
-				getHandlers(g.getPlayers()));
+		broadcast(SERVER_CONNECTIONLOST + " " + handler.getPlayer().getName(), getHandlers(g.getPlayers()));
 
 		g.removePlayer(handler.getPlayer());
 		clients.remove(handler);
@@ -112,8 +109,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @return
 	 */
 	private Collection<ClientHandlerController> getHandlers(List<Player> players) {
-		return clients.stream().filter(c -> players.contains(c.getPlayer()))
-				.collect(Collectors.toList());
+		return clients.stream().filter(c -> players.contains(c.getPlayer())).collect(Collectors.toList());
 	}
 
 	private Collection<ClientHandlerController> getHandler(Player player) {
@@ -160,8 +156,7 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	 * @param sender
 	 * @throws BadMoveException
 	 */
-	public void execute(String commandline, ClientHandlerController sender)
-			throws BadMoveException {
+	public void execute(String commandline, ClientHandlerController sender) throws BadMoveException {
 		String[] commandlineSplit = commandline.split(" ");
 
 		String command = commandlineSplit[0];
@@ -169,39 +164,39 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		System.arraycopy(commandlineSplit, 1, args, 0, commandlineSplit.length - 1);
 
 		switch (command) {
-			case CLIENT_JOINREQUEST:
-				if (!isUsernameInUse(args[0])) {
-					sender.getPlayer().setName(args[0]);
-					broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
-				} else {
-					broadcast(SERVER_DENYREQUEST + DELIM + args[0], sender);
-				}
-				break;
-			case CLIENT_GAMEREQUEST:
-				addUserToGame(sender.getPlayer());
-				break;
-			case CLIENT_SETMOVE:
-				if (isTurn(sender.getPlayer())) {
-					try {
-						int x = Integer.parseInt(args[0]);
-						int y = Integer.parseInt(args[1]);
-						getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
-					} catch (NumberFormatException e) {
-						broadcast(SERVER_DENYMOVE, sender);
-					}
-				} else {
+		case CLIENT_JOINREQUEST:
+			if (!isUsernameInUse(args[0])) {
+				sender.getPlayer().setName(args[0]);
+				broadcast(SERVER_ACCEPTREQUEST + DELIM + args[0] + DELIM + "0 0 0 0", sender);
+			} else {
+				broadcast(SERVER_DENYREQUEST + DELIM + args[0], sender);
+			}
+			break;
+		case CLIENT_GAMEREQUEST:
+			addUserToGame(sender.getPlayer());
+			break;
+		case CLIENT_SETMOVE:
+			if (isTurn(sender.getPlayer())) {
+				try {
+					int x = Integer.parseInt(args[0]);
+					int y = Integer.parseInt(args[1]);
+					getGame(sender.getPlayer()).doMove(x, y, sender.getPlayer().getBead());
+				} catch (NumberFormatException e) {
 					broadcast(SERVER_DENYMOVE, sender);
 				}
-				break;
-			case CLIENT_SENDMESSAGE:
-			case CLIENT_REQUESTCHALLENGELIST:
-			case CLIENT_REQUESTCHALLENGE:
-			case CLIENT_ANSWERCHALLENGE:
-			case CLIENT_REQUESTLEADERBOARD:
-			case CLIENT_SETLEADERBOARD:
-			default:
-				broadcast(SERVER_INVALIDCOMMAND, sender);
-				break;
+			} else {
+				broadcast(SERVER_DENYMOVE, sender);
+			}
+			break;
+		case CLIENT_SENDMESSAGE:
+		case CLIENT_REQUESTCHALLENGELIST:
+		case CLIENT_REQUESTCHALLENGE:
+		case CLIENT_ANSWERCHALLENGE:
+		case CLIENT_REQUESTLEADERBOARD:
+		case CLIENT_SETLEADERBOARD:
+		default:
+			broadcast(SERVER_INVALIDCOMMAND, sender);
+			break;
 		}
 	}
 
@@ -252,11 +247,9 @@ public class NetworkController extends Thread implements Protocol, Observer {
 		if (game.getPlayers().size() == 2) {
 			player.setBead(new Bead(Colour.RED));
 			game.start();
-			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(),
-					getHandlers(game.getPlayers()));
+			broadcast(SERVER_STARTGAME + DELIM + game.getPlayerString(), getHandlers(game.getPlayers()));
 
-			broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(),
-					getHandler(game.getCurrent()));
+			broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
 		} else {
 			player.setBead(new Bead(Colour.YELLOW));
 			broadcast(SERVER_WAITFORCLIENT, getHandler(player));
@@ -278,19 +271,16 @@ public class NetworkController extends Thread implements Protocol, Observer {
 	public void update(Observable obs, Object obj) {
 		if (obs instanceof Game) {
 			Game game = (Game) obs;
-			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getLastMoveString(),
-					getHandlers(game.getPlayers()));
+			broadcast(SERVER_NOTIFYMOVE + DELIM + game.getLastMoveString(), getHandlers(game.getPlayers()));
 
 			if (game.hasEnded()) {
 				if (game.hasWinner()) {
-					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(),
-							getHandlers(game.getPlayers()));
+					broadcast(SERVER_GAMEOVER + DELIM + game.getWinner().getName(), getHandlers(game.getPlayers()));
 				} else {
 					broadcast(SERVER_GAMEOVER, getHandlers(game.getPlayers()));
 				}
 			} else {
-				broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(),
-						getHandler(game.getCurrent()));
+				broadcast(SERVER_MOVEREQUEST + DELIM + game.getCurrent().getName(), getHandler(game.getCurrent()));
 			}
 		}
 	}
